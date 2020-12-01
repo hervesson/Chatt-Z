@@ -14,6 +14,7 @@ import { loginUser, apiError } from '../../redux/actions';
 //Import Images
 import logodark from "../../assets/images/logo-dark.png";
 import logolight from "../../assets/images/logo-light.png";
+import logoZutt from "../../assets/images/logo-Zutt.svg";
 
 /**
  * Login component
@@ -58,7 +59,7 @@ const Login = (props) => {
                     <Col md={8} lg={6} xl={5} >
                         <div className="text-center mb-4">
                             <Link to="/" className="auth-logo mb-5 d-block">
-                                <img src={logodark} alt="" height="30" className="logo logo-dark"/>
+                                <img src={logoZutt} alt="" height="50" className="logo logo-dark"/>
                                 <img src={logolight} alt="" height="30" className="logo logo-light" />
                             </Link>
 

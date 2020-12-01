@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { setActiveTab } from "../../redux/actions";
 
 //Import Images
-import logo from "../../assets/images/logo.svg"
+import logo from "../../assets/images/logo_Zutt.svg"
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
 
 //i18n

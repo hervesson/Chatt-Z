@@ -2,6 +2,8 @@ import firebase from 'firebase/app';
 // Add the Firebase products that you want to use
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/database"
+import "firebase/storage"
 
 class FirebaseAuthBackend {
     constructor(firebaseConfig) {
@@ -91,6 +93,20 @@ class FirebaseAuthBackend {
         // var errorCode = error.code;
         var errorMessage = error.message;
         return errorMessage;
+    }
+
+    retriveData() {
+        return new Promise((resolve, reject) => {
+            firebase.database().ref("/server/talks").on('value', snapshot => {
+                let conversas = [];
+                    snapshot.forEach(ids => {
+                        conversas.push(ids.val()); 
+                    })
+                resolve({ conversas });
+            }, (error) => {
+                reject(this._handleError(error));
+            })
+        }); 
     }
 }
 

@@ -1,5 +1,5 @@
 import {
-    CHAT_USER,ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP
+    CHAT_USER,ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS,REQUEST_FAILED
 } from './constants';
 
 
@@ -26,3 +26,18 @@ export const createGroup = (groupData) => ({
     type : CREATE_GROUP,
     payload : groupData
 })
+
+export const requestChat = () => ({
+    type: REQUEST_CHAT
+});
+
+export const requestSucess = (chats) => ({
+    type: REQUEST_SUCESS,
+    payload: chats
+});
+
+export const requestFailed = (error) => ({
+    type: REQUEST_FAILED,
+    payload: error
+});
+

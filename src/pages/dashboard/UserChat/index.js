@@ -11,11 +11,11 @@ import UserProfileSidebar from "../../../components/UserProfileSidebar";
 import SelectContact from "../../../components/SelectContact";
 import UserHead from "./UserHead";
 import ImageList from "./ImageList";
-import ChatInput from "./ChatInput";
+import ChatInput from "./ChatInput"; 
 import FileList from "./FileList";
 
 //actions
-import { openUserSidebar,setFullUser } from "../../../redux/actions";
+import { openUserSidebar, setFullUser, requestChat } from "../../../redux/actions";
 
 //Import Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 
 function UserChat(props) {
 
-    const ref = useRef();
+    const ref = useRef();  
 
     const [modal, setModal] = useState(false);
 
@@ -35,8 +35,8 @@ function UserChat(props) {
 
     //demo conversation messages
     //userType must be required
-    const [ allUsers ] = useState(props.recentChatList);
-    const [ chatMessages, setchatMessages ] = useState(props.recentChatList[props.active_user].messages);
+
+    const [ chatMessages, setchatMessages ] = useState([props.recentChatList[props.active_user].messages]); console.log(chatMessages)
 
     useEffect(() => {
         setchatMessages(props.recentChatList[props.active_user].messages);
@@ -45,6 +45,10 @@ function UserChat(props) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
         }
     },[props.active_user, props.recentChatList]);
+
+    useEffect(() => {
+       props.requestChat()
+    },[props.active_user]);
 
     const toggle = () => setModal(!modal);
 
@@ -62,7 +66,7 @@ function UserChat(props) {
                     message : message,
                     time : "00:" + n,
                     userType : "sender",
-                    image : avatar4,
+                    //image : avatar4,
                     isFileMessage : false,
                     isImageMessage : false
                 }
@@ -75,7 +79,7 @@ function UserChat(props) {
                     fileMessage : message.name,
                     size : message.size,
                     time : "00:" + n,
-                    userType : "sender",
+                    userType : "sender", 
                     image : avatar4,
                     isFileMessage : true,
                     isImageMessage : false
@@ -103,11 +107,11 @@ function UserChat(props) {
             default:
                 break;
         }
-     
+        //console.log(messageObj)
         //add message object to chat        
         setchatMessages([...chatMessages, messageObj]);
 
-        let copyallUsers = [...allUsers];
+        let copyallUsers = props.recentChatList;
         copyallUsers[props.active_user].messages = [...chatMessages, messageObj];
         copyallUsers[props.active_user].isTyping = false;
         props.setFullUser(copyallUsers);
@@ -115,7 +119,7 @@ function UserChat(props) {
         scrolltoBottom();
     }
 
-    function scrolltoBottom(){
+    function scrolltoBottom(){  
         if (ref.current.el) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
         }
@@ -369,5 +373,5 @@ const mapStateToProps = (state) => {
     return { active_user,userSidebar };
 };
 
-export default withRouter(connect(mapStateToProps, { openUserSidebar,setFullUser })(UserChat));
+export default withRouter(connect(mapStateToProps, { openUserSidebar,setFullUser, requestChat })(UserChat));
 

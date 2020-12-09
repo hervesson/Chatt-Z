@@ -1,134 +1,23 @@
-import firebase from 'firebase/app';
-// Add the Firebase products that you want to use
+import firebase from "firebase/app";
 import "firebase/auth";
-import "firebase/firestore";
 import "firebase/database"
 import "firebase/storage"
 
-class FirebaseAuthBackend {
-    constructor(firebaseConfig) {
-        if (firebaseConfig) {
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    localStorage.setItem("authUser", JSON.stringify(user));
-                } else {
-                    localStorage.removeItem('authUser');
-                }
-            });
-        }
-    }
 
-    /**
-     * Registers the user with given details
-     */
-    registerUser = (email, password) => {
-        return new Promise((resolve, reject) => {
-            firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
-                resolve(firebase.auth().currentUser);
-            }, (error) => {
-                reject(this._handleError(error));
-            });
-        });
-    }
+var firebaseConfig = {
+    apiKey: "AIzaSyBjHzDsOKoEvBrPfIY7tueR8_MgbKIeYMQ",
+    authDomain: "chat-zutt.firebaseapp.com",
+    databaseURL: "https://chat-zutt.firebaseio.com",
+    projectId: "chat-zutt",
+    storageBucket: "chat-zutt.appspot.com",
+    messagingSenderId: "62254642008",
+    appId: "1:62254642008:web:e1e767d089ffe45dfbeb2d",
+    measurementId: "G-YG1693PDKS"
+};
 
-    /**
-     * Login user with given details
-     */
-    loginUser = (email, password) => {
-        return new Promise((resolve, reject) => {
-            firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
-                resolve(firebase.auth().currentUser);
-            }, (error) => {
-                reject(this._handleError(error));
-            });
-        });
-    }
+firebase.initializeApp(firebaseConfig);
 
-    /**
-     * forget Password user with given details
-     */
-    forgetPassword = (email) => {
-        return new Promise((resolve, reject) => {
-            firebase.auth().sendPasswordResetEmail(email, { url: window.location.protocol + "//" + window.location.host + "/login" }).then(() => {
-                resolve(true);
-            }).catch((error) => {
-                reject(this._handleError(error));
-            })
-        });
-    }
+export const auth = firebase.auth();
+export const database = firebase.database();
+export const storage = firebase.storage();
 
-    /**
-     * Logout the user
-     */
-    logout = () => {
-        return new Promise((resolve, reject) => {
-            firebase.auth().signOut().then(() => {
-                resolve(true);
-            }).catch((error) => {
-                reject(this._handleError(error));
-            })
-        });
-    }
-
-    setLoggeedInUser = (user) => {
-        localStorage.setItem("authUser", JSON.stringify(user));
-    }
-
-    /**
-     * Returns the authenticated user
-     */
-    getAuthenticatedUser = () => {
-        if (!localStorage.getItem('authUser'))
-            return null;
-        return JSON.parse(localStorage.getItem('authUser'));
-    }
-
-    /**
-     * Handle the error
-     * @param {*} error 
-     */
-    _handleError(error) {
-        // var errorCode = error.code;
-        var errorMessage = error.message;
-        return errorMessage;
-    }
-
-    retriveData() {
-        return new Promise((resolve, reject) => {
-            firebase.database().ref("/server/talks").on('value', snapshot => {
-                let conversas = [];
-                    snapshot.forEach(ids => {
-                        conversas.push(ids.val()); 
-                    })
-                resolve({ conversas });
-            }, (error) => {
-                reject(this._handleError(error));
-            })
-        }); 
-    }
-}
-
-
-let _fireBaseBackend = null;
-
-/**
- * Initilize the backend
- * @param {*} config 
- */
-const initFirebaseBackend = (config) => {
-    if (!_fireBaseBackend) {
-        _fireBaseBackend = new FirebaseAuthBackend(config);
-    }
-    return _fireBaseBackend;
-}
-
-/**
- * Returns the firebase backend
- */
-const getFirebaseBackend = () => {
-    return _fireBaseBackend;
-}
-
-export { initFirebaseBackend, getFirebaseBackend };

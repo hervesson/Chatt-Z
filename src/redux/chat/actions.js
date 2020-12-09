@@ -1,5 +1,6 @@
 import {
-    CHAT_USER,ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS,REQUEST_FAILED
+    CHAT_USER,ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS,REQUEST_FAILED,SET_IMAGE, SET_AUDIO,
+    SET_FILE
 } from './constants';
 
 
@@ -12,9 +13,24 @@ export const activeUser = (userId) => ({
     payload : userId
 });
 
-export const setFullUser = (fullUser) => ({
+export const setFullUser = (fullUser, newMessage, reference) => ({
     type: FULL_USER,
-    payload : fullUser
+    payload : { fullUser, newMessage, reference } 
+});
+
+export const setImage = (chatMessages, messageObj, message, numero ) => ({
+    type: SET_IMAGE,
+    payload : { chatMessages, messageObj, message, numero }  
+});
+
+export const setAudio = (chatMessages, messageObj, message, numero ) => ({
+    type: SET_AUDIO,
+    payload : { chatMessages, messageObj, message, numero }  
+});
+
+export const setFile = (chatMessages, messageObj, message, numero) => ({
+    type: SET_FILE,
+    payload : { chatMessages, messageObj, message, numero }  
 });
 
 export const addLoggedinUser = (userData) => ({

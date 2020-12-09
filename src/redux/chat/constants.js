@@ -6,4 +6,9 @@ export const CREATE_GROUP = "CREATE_GROUP";
 export const REQUEST_CHAT = "REQUEST_CHAT";
 export const REQUEST_SUCESS = "REQUEST_SUCESS";
 export const REQUEST_FAILED = "REQUEST_FAILED";
+export const SET_IMAGE = "SET_IMAGE";
+export const SET_AUDIO = "SET_AUDIO";
+export const SET_FILE = "SET_FILE";
+
+
 

@@ -15,7 +15,7 @@ import ChatInput from "./ChatInput";
 import FileList from "./FileList";
 
 //actions
-import { openUserSidebar, setFullUser, requestChat } from "../../../redux/actions";
+import { openUserSidebar, setFullUser, requestChat, setImage, setAudio, setFile } from "../../../redux/actions";
 
 //Import Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
@@ -36,7 +36,7 @@ function UserChat(props) {
     //demo conversation messages
     //userType must be required
 
-    const [ chatMessages, setchatMessages ] = useState([props.recentChatList[props.active_user].messages]); console.log(chatMessages)
+    const [ chatMessages, setchatMessages ] = useState([props.recentChatList[props.active_user].messages]); 
 
     useEffect(() => {
         setchatMessages(props.recentChatList[props.active_user].messages);
@@ -48,7 +48,7 @@ function UserChat(props) {
 
     useEffect(() => {
        props.requestChat()
-    },[props.active_user]);
+    },[]);
 
     const toggle = () => setModal(!modal);
 
@@ -62,45 +62,63 @@ function UserChat(props) {
         switch (type) {
             case "textMessage":
                 messageObj = {
-                    id : chatMessages.length+1,
+                    id : chatMessages.length,
                     message : message,
                     time : "00:" + n,
                     userType : "sender",
                     //image : avatar4,
                     isFileMessage : false,
-                    isImageMessage : false
+                    isImageMessage : false,
+                    isAudioMessage : false
                 }
                 break;
 
+            case "audioMessage":
+                messageObj = {
+                    id : chatMessages.length,
+                    message : "audio",
+                    audioMessage : URL.createObjectURL(message),
+                    time : "00:" + n,
+                    userType : "sender",
+                    //image : avatar4,
+                    isFileMessage : false,
+                    isImageMessage : false,
+                    isAudioMessage : true
+                }
+                break;    
+
             case "fileMessage":
                 messageObj = {
-                    id : chatMessages.length+1,
+                    id : chatMessages.length,
                     message : 'file',
+                    downloadURL: '',
                     fileMessage : message.name,
                     size : message.size,
                     time : "00:" + n,
                     userType : "sender", 
-                    image : avatar4,
+                    //image : avatar4,
                     isFileMessage : true,
-                    isImageMessage : false
+                    isImageMessage : false,
+                    isAudioMessage : false
                 }
                 break;
 
             case "imageMessage":
                 var imageMessage = [
-                    { image : message },
+                    { image : URL.createObjectURL( message )},
                 ]
 
                 messageObj = {
-                    id : chatMessages.length+1,
+                    id : chatMessages.length,
                     message : 'image',
                     imageMessage : imageMessage,
                     size : message.size,
                     time : "00:" + n,
                     userType : "sender",
-                    image : avatar4,
+                    //image : avatar4,
                     isImageMessage : true,
-                    isFileMessage : false
+                    isFileMessage : false,
+                    isAudioMessage : false
                 }
                 break;
         
@@ -114,7 +132,33 @@ function UserChat(props) {
         let copyallUsers = props.recentChatList;
         copyallUsers[props.active_user].messages = [...chatMessages, messageObj];
         copyallUsers[props.active_user].isTyping = false;
-        props.setFullUser(copyallUsers);
+        let numero = copyallUsers[props.active_user].id
+
+        let newMessage = [...chatMessages, messageObj]
+        console.log(message)
+
+        switch (type) {
+            case "textMessage":
+                props.setFullUser(copyallUsers, newMessage, numero);
+                break;
+
+            case "audioMessage":
+                props.setAudio(chatMessages, messageObj, message, numero);
+                break;    
+
+            case "fileMessage":
+                props.setFile(chatMessages, messageObj, message, numero);
+                break;
+
+            case "imageMessage":
+                props.setImage(chatMessages, messageObj, message, numero);
+                break;
+        
+            default:
+                break;
+        }
+
+        
 
         scrolltoBottom();
     }
@@ -189,6 +233,11 @@ function UserChat(props) {
                                                                         <p className="mb-0">
                                                                             {chat.message}
                                                                         </p>
+                                                                }
+                                                                {
+                                                                    chat.audioMessage &&
+                                                                       <audio src={chat.audioMessage} controls="controls" />
+                                                                        
                                                                 }
                                                                 {
                                                                     chat.imageMessage &&
@@ -287,6 +336,11 @@ function UserChat(props) {
                                                                         </p>
                                                                 }
                                                                 {
+                                                                    chat.audioMessage &&
+                                                                      <audio src={chat.audioMessage} controls="controls" />
+                                                                        
+                                                                }
+                                                                {
                                                                     chat.imageMessage &&
                                                                         // image list component
                                                                         <ImageList images={chat.imageMessage} />
@@ -294,7 +348,7 @@ function UserChat(props) {
                                                                 {
                                                                     chat.fileMessage &&
                                                                         //file input component
-                                                                        <FileList fileName={chat.fileMessage} fileSize={chat.size} />
+                                                                        <FileList fileName={chat.fileMessage} fileSize={chat.size} filedownlad={chat.downloadURL} />
                                                                 }
                                                                 {
                                                                     chat.isTyping &&
@@ -373,5 +427,5 @@ const mapStateToProps = (state) => {
     return { active_user,userSidebar };
 };
 
-export default withRouter(connect(mapStateToProps, { openUserSidebar,setFullUser, requestChat })(UserChat));
+export default withRouter(connect(mapStateToProps, { openUserSidebar,setFullUser, requestChat, setImage, setAudio, setFile })(UserChat));
 

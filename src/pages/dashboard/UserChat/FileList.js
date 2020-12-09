@@ -29,9 +29,9 @@ function FileList(props) {
                                                             <div className="ml-4">
                                                                 <ul className="list-inline mb-0 font-size-20">
                                                                     <li className="list-inline-item">
-                                                                        <Link to="#" className="text-muted">
+                                                                        <a href={props.filedownlad} target="_blank" rel="noopener noreferrer" download>
                                                                             <i className="ri-download-2-line"></i>
-                                                                        </Link>
+                                                                        </a>
                                                                     </li>
                                                                     <UncontrolledDropdown tag="li" className="list-inline-item">
                                                                         <DropdownToggle tag="a" className="dropdown-toggle text-muted">

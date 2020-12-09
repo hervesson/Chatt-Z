@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Button, Input, Row, Col, UncontrolledTooltip, ButtonDropdown, DropdownToggle, DropdownMenu, Label, Form } from "reactstrap";
+import MicRecorder from 'mic-recorder-to-mp3';
 import { Picker } from 'emoji-mart'
 import 'emoji-mart/css/emoji-mart.css'
+
+const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
     const [isOpen, setisOpen] = useState(false);
-    const [file, setfile] = useState({
-        name : "",
-        size : ""
-    });
-    const [fileImage, setfileImage] = useState("")
+    const [file, setfile] = useState('');
+    const [fileImage, setfileImage] = useState("") 
+    const [blobURL, setAudio] = useState('')
+    const [isRecording, setRecording] = useState(false)
 
     const toggle = () => setisOpen(!isOpen);
 
@@ -28,17 +30,33 @@ function ChatInput(props) {
     //function for file input change
     const handleFileChange = e => {
         if(e.target.files.length !==0 )
-        setfile({
-            name : e.target.files[0].name,
-            size : e.target.files[0].size
-        })
+        setfile( e.target.files[0] )
     }
 
     //function for image input change
     const handleImageChange = e => {
         if(e.target.files.length !==0 )
-        setfileImage(URL.createObjectURL(e.target.files[0]))
+        setfileImage(e.target.files[0])
     }
+
+
+    const start = () => {
+        Mp3Recorder.start()
+            .then(() => {
+               setRecording( true );
+            }).catch((e) => console.error(e));
+        
+    };
+
+    const stop = () => {
+        Mp3Recorder.stop()
+        .getMp3()
+        .then(([buffer, blob]) => {
+            //const blobURL = URL.createObjectURL(blob);
+            setAudio( blob );
+            setRecording(false)
+        }).catch((e) => console.log(e));
+    };
 
     //function for send data to onaddMessage function(in userChat/index.js component)
     const onaddMessage = (e, textMessage) => {
@@ -49,7 +67,12 @@ function ChatInput(props) {
             settextMessage("");
         }
 
-        //if file input value is not empty then call onaddMessage function
+        if(blobURL !== "") {
+            props.onaddMessage(blobURL, "audioMessage");
+            setAudio("");
+        }
+
+        //if file input value is not empty then call onaddMessage function 
         if(file.name !== "") {
             props.onaddMessage(file, "fileMessage");
             setfile({
@@ -72,7 +95,7 @@ function ChatInput(props) {
                                 <Row noGutters>
                                     <Col>
                                         <div>
-                                            <Input type="text" value={textMessage} onChange={handleChange} className="form-control form-control-lg bg-light border-light" placeholder="Enter Message..." />
+                                            <Input type="text" value={textMessage} onChange={handleChange} className="form-control form-control-lg bg-light border-light" placeholder="Digite aqui sua mensagem..." />
                                         </div>
                                     </Col>
                                     <Col xs="auto">
@@ -107,6 +130,16 @@ function ChatInput(props) {
                                                     </Label>   
                                                     <UncontrolledTooltip target="images" placement="top">
                                                         Images
+                                                    </UncontrolledTooltip>
+                                                </li>
+                                                <li className="list-inline-item input-file">
+                                                    <Label id="audio" className="mr-1 btn btn-link text-decoration-none font-size-16 btn-lg waves-effect">
+                                                        <button onClick={() => {isRecording ? stop() : start() }}>
+                                                            <i className="ri-mic-line"></i>
+                                                        </button>  
+                                                    </Label>   
+                                                    <UncontrolledTooltip target="audio" placement="top">
+                                                        audio
                                                     </UncontrolledTooltip>
                                                 </li>
                                                 <li className="list-inline-item">

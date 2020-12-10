@@ -15,7 +15,7 @@ import ChatInput from "./ChatInput";
 import FileList from "./FileList";
 
 //actions
-import { openUserSidebar, setFullUser, requestChat, setImage, setAudio, setFile } from "../../../redux/actions";
+import { openUserSidebar, setFullUser, requestChat, setImage, setAudio, setFile, requestContacts } from "../../../redux/actions";
 
 //Import Images
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
@@ -47,7 +47,8 @@ function UserChat(props) {
     },[props.active_user, props.recentChatList]);
 
     useEffect(() => {
-       props.requestChat()
+       props.requestChat();
+       props.requestContacts()
     },[]);
 
     const toggle = () => setModal(!modal);
@@ -427,5 +428,5 @@ const mapStateToProps = (state) => {
     return { active_user,userSidebar };
 };
 
-export default withRouter(connect(mapStateToProps, { openUserSidebar,setFullUser, requestChat, setImage, setAudio, setFile })(UserChat));
+export default withRouter(connect(mapStateToProps, { openUserSidebar,setFullUser, requestChat, setImage, setAudio, setFile, requestContacts })(UserChat));
 

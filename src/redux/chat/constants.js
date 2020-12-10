@@ -9,6 +9,13 @@ export const REQUEST_FAILED = "REQUEST_FAILED";
 export const SET_IMAGE = "SET_IMAGE";
 export const SET_AUDIO = "SET_AUDIO";
 export const SET_FILE = "SET_FILE";
+export const REQUEST_CONTACTS = "REQUEST_CONTACTS";
+export const CONTACTS_SUCESS = "CONTACTS_SUCESS";
+
+
+
+
+
 
 
 

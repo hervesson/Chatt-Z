@@ -1,6 +1,6 @@
 import {
     CHAT_USER,ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS,REQUEST_FAILED,SET_IMAGE, SET_AUDIO,
-    SET_FILE
+    SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS
 } from './constants';
 
 
@@ -55,5 +55,14 @@ export const requestSucess = (chats) => ({
 export const requestFailed = (error) => ({
     type: REQUEST_FAILED,
     payload: error
+});
+
+export const requestContacts = () => ({
+    type: REQUEST_CONTACTS
+});
+
+export const contactsSucess = (contatos) => ({
+    type: CONTACTS_SUCESS,
+    payload : contatos
 });
 

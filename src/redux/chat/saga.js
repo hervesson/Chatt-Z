@@ -2,30 +2,43 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { firebaseDatabaseServices } from "../../helpers/firebaseServices/firebaseDatabaseServices";
 
+import { apiServices } from "../../helpers/apiServices";
 
 import {
     REQUEST_CHAT,
+    REQUEST_CONTACTS,
     FULL_USER,
     SET_IMAGE,
     SET_AUDIO,
-    SET_FILE
+    SET_FILE,
 } from './constants';
 
 
 import {
     requestSucess,
     requestFailed,
+    contactsSucess
 } from './actions';
 
 
 //Initilize firebase
 const fireBaseBackend = new firebaseDatabaseServices();
+const apiBackend = new apiServices();
 
 
 function* retriveData() {
     try {
         const response = yield call(fireBaseBackend.retriveData);
         yield put(requestSucess(response));
+    } catch (error) {
+        yield put(requestFailed(error)); 
+    }
+}
+
+function* retriveContacts() {
+    try {
+        const response = yield call(apiBackend.retriveContatos);
+        yield put(contactsSucess(response));
     } catch (error) {
         yield put(requestFailed(error)); 
     }
@@ -72,6 +85,10 @@ export function* watchChats() {
     yield takeEvery(REQUEST_CHAT, retriveData);
 }
 
+export function* watchContacts() {
+    yield takeEvery(REQUEST_CONTACTS, retriveContacts);
+}
+
 export function* senderMessage() {
     yield takeEvery(FULL_USER, sender);
 }
@@ -89,13 +106,16 @@ export function* senderFile() {
 }
 
 
+
+
 function* chatSaga() {
     yield all([
         fork(watchChats),
+        fork(watchContacts),
         fork(senderMessage),
         fork(senderImage),
         fork(senderAudio),
-        fork(senderFile)
+        fork(senderFile),    
     ]);
 }
 

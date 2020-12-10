@@ -28,7 +28,7 @@ class Contacts extends Component {
         if (prevProps !== this.props) {
           this.setState({
             contacts : this.props.contacts
-          });
+          }); this.sortContact()
         }
     }
 
@@ -37,7 +37,8 @@ class Contacts extends Component {
     }
 
     sortContact(){
-        let data = this.state.contacts.reduce((r, e) => {
+        let sorri = this.props.contacts
+        let data = sorri.reduce((r, e) => {
             try {
                 // get first letter of name of current element
                 let group = e.name[0];

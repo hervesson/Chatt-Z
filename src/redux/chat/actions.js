@@ -13,9 +13,9 @@ export const activeUser = (userId) => ({
     payload : userId
 });
 
-export const setFullUser = (fullUser, newMessage, reference) => ({
+export const setFullUser = (messageObj, newMessage, reference) => ({
     type: FULL_USER,
-    payload : { fullUser, newMessage, reference } 
+    payload : { messageObj, newMessage, reference } 
 });
 
 export const setImage = (chatMessages, messageObj, message, numero ) => ({

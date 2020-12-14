@@ -136,11 +136,10 @@ function UserChat(props) {
         let numero = copyallUsers[props.active_user].id
 
         let newMessage = [...chatMessages, messageObj]
-        console.log(message)
-
+       
         switch (type) {
             case "textMessage":
-                props.setFullUser(copyallUsers, newMessage, numero);
+                props.setFullUser(messageObj, newMessage, numero);
                 break;
 
             case "audioMessage":

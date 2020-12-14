@@ -33,10 +33,13 @@ class firebaseDatabaseServices {
             "state_changed",
             snapshot => {
               const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+              console.log(progress)
             },
-            error => { console.log(error)},
+            error => { console.log(error); reject({error})},
             () => {
                storage.ref("ZuttChat/images/"+ numero + "/" + message.name).getDownloadURL().then(url => {
+
+                resolve({url})
                 
                 var imageMessage = [
                     { image : url},
@@ -73,10 +76,13 @@ class firebaseDatabaseServices {
             "state_changed",
             snapshot => {
               const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+              console.log(progress)
             },
-            error => { console.log(error)},
+            error => { console.log(error); reject({error})},
             () => {
-               storage.ref("ZuttChat/audios/"+ numero + "/" + chatMessages.length).getDownloadURL().then(url => {
+                storage.ref("ZuttChat/audios/"+ numero + "/" + chatMessages.length).getDownloadURL().then(url => {
+
+                resolve({url})
 
                 let d = new Date();
                 var n = d.getSeconds();
@@ -110,10 +116,13 @@ class firebaseDatabaseServices {
             "state_changed",
             snapshot => {
               const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+              console.log(progress)
             },
-            error => { console.log(error)},
+            error => { console.log(error); reject({error})},
             () => {
                storage.ref("ZuttChat/files/"+ numero + "/" + chatMessages.length).getDownloadURL().then(url => {
+
+                resolve({url})
 
                 let d = new Date();
                 var n = d.getSeconds();

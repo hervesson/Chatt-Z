@@ -73,12 +73,9 @@ function ChatInput(props) {
         }
 
         //if file input value is not empty then call onaddMessage function 
-        if(file.name !== "") {
+        if(file !== "") {
             props.onaddMessage(file, "fileMessage");
-            setfile({
-                name : "",
-                size : ""
-            })
+            setfile("")
         }
 
         //if image input value is not empty then call onaddMessage function

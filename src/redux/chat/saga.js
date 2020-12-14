@@ -1,6 +1,10 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery, take } from 'redux-saga/effects';
 
 import { firebaseDatabaseServices } from "../../helpers/firebaseServices/firebaseDatabaseServices";
+
+import { database } from "../../helpers/firebase";
+
+import { eventChannel } from "redux-saga";
 
 import { apiServices } from "../../helpers/apiServices";
 
@@ -27,13 +31,27 @@ const apiBackend = new apiServices();
 
 
 function* retriveData() {
-    try {
-        const response = yield call(fireBaseBackend.retriveData);
-        yield put(requestSucess(response));
-    } catch (error) {
-        yield put(requestFailed(error)); 
-    }
+    const channel = new eventChannel(emiter => {
+    const listener = database.ref("/server/talks").on("value", snapshot => {
+        let conversas = [];
+        snapshot.forEach(ids => {
+            conversas.push(ids.val()); 
+        })
+      emiter({ data: conversas || {} });
+    });
+
+    return () => {
+        listener.off();
+        };
+    });
+
+    while (true) {
+    const { data } = yield take(channel);
+        // #4
+    yield put(requestSucess(data));
+  }
 }
+
 
 function* retriveContacts() {
     try {
@@ -44,10 +62,10 @@ function* retriveContacts() {
     }
 }
 
-function* sender({ payload: { newMessage, reference } }) {
+function* sender({ payload: {messageObj, newMessage, reference } }) {
     try {
-        const response = yield call(fireBaseBackend.mandarMensagem, newMessage, reference);
-        //yield put(requestSucess(response));
+        yield call(fireBaseBackend.mandarMensagem, newMessage, reference);
+        yield call(apiBackend.sendMessages, messageObj, reference);
     } catch (error) {
         yield put(requestFailed(error)); 
     }
@@ -56,7 +74,7 @@ function* sender({ payload: { newMessage, reference } }) {
 function* sendImage({ payload: { chatMessages, messageObj, message, numero }  }) {
     try {
         const response = yield call(fireBaseBackend.mandarImagem, chatMessages, messageObj, message, numero);
-        //yield put(requestSucess(response));
+        yield call(apiBackend.sendImagem, response, numero);
     } catch (error) {
         yield put(requestFailed(error)); 
     }
@@ -65,7 +83,7 @@ function* sendImage({ payload: { chatMessages, messageObj, message, numero }  })
 function* sendAudio({ payload: { chatMessages, messageObj, message, numero }  }) {
     try {
         const response = yield call(fireBaseBackend.mandarAudio, chatMessages, messageObj, message, numero);
-        //yield put(requestSucess(response));
+        yield call(apiBackend.sendAudio, response, numero);
     } catch (error) {
         yield put(requestFailed(error)); 
     }
@@ -74,7 +92,7 @@ function* sendAudio({ payload: { chatMessages, messageObj, message, numero }  })
 function* sendFile({ payload: { chatMessages, messageObj, message, numero }  }) {
     try {
         const response = yield call(fireBaseBackend.mandarArquivo, chatMessages, messageObj, message, numero);
-        //yield put(requestSucess(response));
+         yield call(apiBackend.sendDocument, response, numero);
     } catch (error) {
         yield put(requestFailed(error)); 
     }
@@ -115,8 +133,19 @@ function* chatSaga() {
         fork(senderMessage),
         fork(senderImage),
         fork(senderAudio),
-        fork(senderFile),    
+        fork(senderFile), 
     ]);
 }
 
 export default chatSaga;
+
+
+
+/*function* retriveData() {
+    try {
+        const response = yield call(fireBaseBackend.retriveData);
+        yield put(requestSucess(response));
+    } catch (error) {
+        yield put(requestFailed(error)); 
+    }
+}*/

@@ -27,7 +27,7 @@ const Chat = (state = INIT_STATE, action) => {
             return { ...state, loading: true, error: false};
 
         case REQUEST_SUCESS:
-            return { ...state, loading: false, error: false, users: action.payload.conversas};
+            return { ...state, loading: false, error: false, users: action.payload};
 
         case REQUEST_FAILED:
             return { ...state, loading: false, error: false };
@@ -51,7 +51,8 @@ const Chat = (state = INIT_STATE, action) => {
         case FULL_USER:
             return { 
             	...state,
-                users : action.payload.fullUser };
+                //users : action.payload.fullUser
+                 };
 
         case ADD_LOGGED_USER:
             const newUser =  action.payload

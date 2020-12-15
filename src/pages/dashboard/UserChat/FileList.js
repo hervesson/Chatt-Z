@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Media, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 //i18n
 import { useTranslation } from 'react-i18next';

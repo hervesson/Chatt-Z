@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { loginUser, apiError } from '../../redux/actions';
 
 //Import Images
-import logodark from "../../assets/images/logo-dark.png";
+//import logodark from "../../assets/images/logo-dark.png";
 import logolight from "../../assets/images/logo-light.png";
 import logoZutt from "../../assets/images/logo-Zutt.svg";
 

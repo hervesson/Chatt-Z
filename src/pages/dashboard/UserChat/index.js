@@ -18,8 +18,8 @@ import FileList from "./FileList";
 import { openUserSidebar, setFullUser, requestChat, setImage, setAudio, setFile, requestContacts } from "../../../redux/actions";
 
 //Import Images
-import avatar4 from "../../../assets/images/users/avatar-4.jpg";
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
+
+import zutt from "../../../assets/images/users/zutt.png";
 
 //i18n
 import { useTranslation } from 'react-i18next';
@@ -67,7 +67,7 @@ function UserChat(props) {
                     message : message,
                     time : "00:" + n,
                     userType : "sender",
-                    //image : avatar4,
+                    image : zutt,
                     isFileMessage : false,
                     isImageMessage : false,
                     isAudioMessage : false
@@ -81,7 +81,7 @@ function UserChat(props) {
                     audioMessage : URL.createObjectURL(message),
                     time : "00:" + n,
                     userType : "sender",
-                    //image : avatar4,
+                    image : zutt,
                     isFileMessage : false,
                     isImageMessage : false,
                     isAudioMessage : true
@@ -97,7 +97,7 @@ function UserChat(props) {
                     size : message.size,
                     time : "00:" + n,
                     userType : "sender", 
-                    //image : avatar4,
+                    image : zutt,
                     isFileMessage : true,
                     isImageMessage : false,
                     isAudioMessage : false
@@ -116,7 +116,7 @@ function UserChat(props) {
                     size : message.size,
                     time : "00:" + n,
                     userType : "sender",
-                    //image : avatar4,
+                    image : zutt,
                     isImageMessage : true,
                     isFileMessage : false,
                     isAudioMessage : false
@@ -159,7 +159,6 @@ function UserChat(props) {
         }
 
         
-
         scrolltoBottom();
     }
 
@@ -212,7 +211,7 @@ function UserChat(props) {
                                                 <div className="conversation-list">
                                                     
                                                     <div className="chat-avatar">
-                                                    {chat.userType === "sender" ?   <img src={avatar1} alt="chatvia" /> : 
+                                                    {chat.userType === "sender" ?   <img src={zutt} alt="chatvia" /> : 
                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                             <div className="avatar-xs">
@@ -298,7 +297,7 @@ function UserChat(props) {
                                                             </div>
                                                             :  
                                                                 <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ?   <img src={avatar1} alt="chatvia" /> : 
+                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="chatvia" /> : 
                                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                                             <div className="avatar-xs">
@@ -311,7 +310,7 @@ function UserChat(props) {
                                                                     }
                                                                 </div>
                                                             :   <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ?   <img src={avatar1} alt="chatvia" /> : 
+                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="chatvia" /> : 
                                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                                             <div className="avatar-xs">

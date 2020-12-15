@@ -1,21 +1,8 @@
 import {  database, storage  } from "../firebase";
 
+import zutt from "../../assets/images/users/zutt.png";
 
 class firebaseDatabaseServices {
-    retriveData() {
-        return new Promise((resolve, reject) => {
-            database.ref("/server/talks").on('value', snapshot => {
-                let conversas = [];
-                    snapshot.forEach(ids => {
-                        conversas.push(ids.val()); 
-                    })
-                resolve({ conversas });
-            }, (error) => {
-                reject(this._handleError(error));
-            })
-        }); 
-    }
-
     mandarMensagem = (newMessage, numero) => {
         try{
             database
@@ -55,7 +42,7 @@ class firebaseDatabaseServices {
                     size : message.size,
                     time : "00:" + n,
                     userType : "sender",
-                    //image : avatar4,
+                    image : zutt,
                     isImageMessage : true,
                     isFileMessage : false
                 }
@@ -94,7 +81,7 @@ class firebaseDatabaseServices {
                     size : message.size,
                     time : "00:" + n,
                     userType : "sender",
-                    //image : avatar4,
+                    image : zutt,
                     isImageMessage : true,
                     isFileMessage : false,
                     isAudioMessage: true
@@ -135,7 +122,7 @@ class firebaseDatabaseServices {
                     size : message.size,
                     time : "00:" + n,
                     userType : "sender", 
-                    //image : avatar4,
+                    image : zutt,
                     isFileMessage : true,
                     isImageMessage : false,
                     isAudioMessage : false

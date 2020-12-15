@@ -37,7 +37,6 @@ class firebaseDatabaseServices {
 
                 var  messageImg = {
                     id : chatMessages.length,
-                    message : 'image',
                     imageMessage : imageMessage,
                     size : message.size,
                     time : "00:" + n,
@@ -76,7 +75,6 @@ class firebaseDatabaseServices {
 
                 var  messageAud = {
                     id : chatMessages.length,
-                    message : 'audio',
                     audioMessage : url,
                     size : message.size,
                     time : "00:" + n,
@@ -116,7 +114,6 @@ class firebaseDatabaseServices {
 
                 var messageFile = {
                     id : chatMessages.length,
-                    message : 'file',
                     downloadURL: url,
                     fileMessage : message.name,
                     size : message.size,

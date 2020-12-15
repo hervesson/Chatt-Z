@@ -77,7 +77,6 @@ function UserChat(props) {
             case "audioMessage":
                 messageObj = {
                     id : chatMessages.length,
-                    message : "audio",
                     audioMessage : URL.createObjectURL(message),
                     time : "00:" + n,
                     userType : "sender",
@@ -91,7 +90,6 @@ function UserChat(props) {
             case "fileMessage":
                 messageObj = {
                     id : chatMessages.length,
-                    message : 'file',
                     downloadURL: '',
                     fileMessage : message.name,
                     size : message.size,
@@ -111,7 +109,6 @@ function UserChat(props) {
 
                 messageObj = {
                     id : chatMessages.length,
-                    message : 'image',
                     imageMessage : imageMessage,
                     size : message.size,
                     time : "00:" + n,
@@ -231,6 +228,7 @@ function UserChat(props) {
                                                                     chat.message &&
                                                                         <p className="mb-0">
                                                                             {chat.message}
+
                                                                         </p>
                                                                 }
                                                                 {
@@ -336,7 +334,12 @@ function UserChat(props) {
                                                                 }
                                                                 {
                                                                     chat.audioMessage &&
-                                                                      <audio src={chat.audioMessage} controls="controls" />
+                                                                    <div>
+                                                                        <p className="mb-0">
+                                                                           audio
+                                                                        </p>
+                                                                        <audio src={chat.audioMessage} controls="controls" />
+                                                                    </div>  
                                                                         
                                                                 }
                                                                 {
@@ -347,7 +350,12 @@ function UserChat(props) {
                                                                 {
                                                                     chat.fileMessage &&
                                                                         //file input component
-                                                                        <FileList fileName={chat.fileMessage} fileSize={chat.size} filedownlad={chat.downloadURL} />
+                                                                        <div>
+                                                                            <p className="mb-0">
+                                                                               file
+                                                                            </p>
+                                                                            <FileList fileName={chat.fileMessage} fileSize={chat.size} filedownlad={chat.downloadURL} />
+                                                                        </div>
                                                                 }
                                                                 {
                                                                     chat.isTyping &&

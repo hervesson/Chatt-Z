@@ -1,0 +1,2 @@
+(this.webpackJsonpchatvia=this.webpackJsonpchatvia||[]).push([[10],{457:function(t,e,n){"use strict";n.r(e);var c=n(0),a=n.n(c),u=n(49),s=n(19),o=n(73);e.default=Object(s.g)(Object(u.b)(null,{logoutUser:o.g})((function(t){return Object(c.useEffect)((function(){t.logoutUser(t.history)}),[t]),a.a.createElement(a.a.Fragment,null)})))}}]);
+//# sourceMappingURL=10.42f497c3.chunk.js.map

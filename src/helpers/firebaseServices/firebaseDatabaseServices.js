@@ -32,23 +32,35 @@ class firebaseDatabaseServices {
                     { image : url},
                 ]
 
-                let d = new Date();
-                var n = d.getSeconds();
+                var Xmas95 = new Date(); 
+                var horas  = Xmas95.getHours();
+                var minut = Xmas95.getMinutes();
+                var date = Xmas95.getDate();
+                var month  = Xmas95.getMonth() + 1;
+                var data =  date+"/"+month
 
                 var  messageImg = {
                     id : chatMessages.length,
                     imageMessage : imageMessage,
                     size : message.size,
-                    time : "00:" + n,
+                    time : horas+":"+minut,
+                    data: data,
                     userType : "sender",
                     image : zutt,
                     isImageMessage : true,
                     isFileMessage : false
                 }
 
-                database.ref("/server/talks/"+ numero + "/messages").set(
-                    [...chatMessages, messageImg]
-                )
+                let ultima = chatMessages[chatMessages.length-1].data
+                if (ultima !== data) {
+                    database.ref("/server/talks/"+ numero + "/messages").set(
+                        [...chatMessages, {isToday: true, data: data}, messageImg]
+                    )
+                } else {
+                    database.ref("/server/talks/"+ numero + "/messages").set(
+                        [...chatMessages, messageImg]
+                    )
+                }
                 });
             }, 
           );
@@ -70,14 +82,19 @@ class firebaseDatabaseServices {
 
                 resolve({url})
 
-                let d = new Date();
-                var n = d.getSeconds();
+                var Xmas95 = new Date(); 
+                var horas  = Xmas95.getHours();
+                var minut = Xmas95.getMinutes();
+                var date = Xmas95.getDate();
+                var month  = Xmas95.getMonth() + 1;
+                var data =  date+"/"+month
 
                 var  messageAud = {
                     id : chatMessages.length,
                     audioMessage : url,
                     size : message.size,
-                    time : "00:" + n,
+                    time : horas+":"+minut,
+                    data: data,
                     userType : "sender",
                     image : zutt,
                     isImageMessage : true,
@@ -85,9 +102,16 @@ class firebaseDatabaseServices {
                     isAudioMessage: true
                 }
 
-                database.ref("/server/talks/"+ numero + "/messages").set(
-                    [...chatMessages, messageAud]
-                )
+                let ultima = chatMessages[chatMessages.length-1].data
+                if (ultima !== data) {
+                    database.ref("/server/talks/"+ numero + "/messages").set(
+                        [...chatMessages, {isToday: true, data: data}, messageAud]
+                    )
+                } else {
+                    database.ref("/server/talks/"+ numero + "/messages").set(
+                        [...chatMessages, messageAud]
+                    )
+                }
                 });
             }, 
           );
@@ -109,15 +133,20 @@ class firebaseDatabaseServices {
 
                 resolve({url})
 
-                let d = new Date();
-                var n = d.getSeconds();
+                var Xmas95 = new Date(); 
+                var horas  = Xmas95.getHours();
+                var minut = Xmas95.getMinutes();
+                var date = Xmas95.getDate();
+                var month  = Xmas95.getMonth() + 1;
+                var data =  date+"/"+month
 
                 var messageFile = {
                     id : chatMessages.length,
                     downloadURL: url,
                     fileMessage : message.name,
                     size : message.size,
-                    time : "00:" + n,
+                    time : horas+":"+minut,
+                    data: data,
                     userType : "sender", 
                     image : zutt,
                     isFileMessage : true,
@@ -125,9 +154,16 @@ class firebaseDatabaseServices {
                     isAudioMessage : false
                 }
 
-                database.ref("/server/talks/"+ numero + "/messages").set(
-                    [...chatMessages, messageFile]
-                )
+                let ultima = chatMessages[chatMessages.length-1].data
+                if (ultima !== data) {
+                    database.ref("/server/talks/"+ numero + "/messages").set(
+                        [...chatMessages, {isToday: true, data: data}, messageFile]
+                    )
+                } else {
+                    database.ref("/server/talks/"+ numero + "/messages").set(
+                        [...chatMessages, messageFile]
+                    )
+                }
                 });
             }, 
           );

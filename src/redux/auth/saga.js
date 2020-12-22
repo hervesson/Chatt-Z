@@ -37,17 +37,8 @@ const create = new APIClient().create;
  */
 function* login({ payload: { username, password, history } }) {
     try {
-        if(process.env.REACT_APP_DEFAULTAUTH === "firebase") {
             const response = yield call(fireBaseBackend.loginUser, username, password);
             yield put(loginUserSuccess(response));
-            
-        } else {
-            const response = yield call(create, '/login', { username, password });
-            localStorage.setItem("authUser", JSON.stringify(response));
-            yield put(loginUserSuccess(response));
-           
-            
-        }
         history.push('/dashboard');
     } catch (error) {
         yield put(apiError(error));

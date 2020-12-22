@@ -131,8 +131,8 @@ function ChatInput(props) {
                                                 </li>
                                                 <li className="list-inline-item input-file">
                                                     <Label id="audio" className="mr-1 btn btn-link text-decoration-none font-size-16 btn-lg waves-effect">
-                                                        <button onClick={() => {isRecording ? stop() : start() }}>
-                                                            <i className="ri-mic-line"></i>
+                                                        <button style={{backgroundColor: isRecording ? "red" : "blue"}} onClick={() => {isRecording ? stop() : start() }}>
+                                                            <i className={isRecording ? "ri-mic-fill" : "ri-mic-line"}></i>
                                                         </button>  
                                                     </Label>   
                                                     <UncontrolledTooltip target="audio" placement="top">

@@ -398,7 +398,12 @@ function UserChat(props) {
                                                                         </p>
                                                                 }
                                                                 {
-                                                                    !chat.isTyping && <p className="chat-time mb-0"><i className={chat.status ? "ri-check-line" : "ri-time-line align-middle" }></i> <span className="align-middle">{chat.time}</span></p>
+                                                                    !chat.isTyping && <p className="chat-time mb-0">
+                                                                        {chat.userType === "sender" ? <i className={chat.status ? "ri-check-line" : "ri-time-line align-middle" }></i> : null}
+                                                                         
+                                                                        <span className="align-middle">{chat.time}
+                                                                        </span>
+                                                                    </p>
                                                                 }
                                                             </div>
                                                             {

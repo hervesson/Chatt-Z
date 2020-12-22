@@ -37,9 +37,9 @@ function ImageList(props) {
                                                             <div className="message-img-link">
                                                                 <ul className="list-inline mb-0">
                                                                     <li className="list-inline-item">
-                                                                        <Link to="#">
+                                                                        <a href={imgMsg.image} target="_blank"  download>
                                                                             <i className="ri-download-2-line"></i>
-                                                                        </Link>
+                                                                        </a>
                                                                     </li>
                                                                     <UncontrolledDropdown tag="li" className="list-inline-item">
                                                                     <DropdownToggle tag="a">

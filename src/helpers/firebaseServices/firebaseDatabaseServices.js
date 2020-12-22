@@ -48,7 +48,8 @@ class firebaseDatabaseServices {
                     userType : "sender",
                     image : zutt,
                     isImageMessage : true,
-                    isFileMessage : false
+                    isFileMessage : false,
+                    isAudioMessage: false
                 }
 
                 let ultima = chatMessages[chatMessages.length-1].data
@@ -97,7 +98,7 @@ class firebaseDatabaseServices {
                     data: data,
                     userType : "sender",
                     image : zutt,
-                    isImageMessage : true,
+                    isImageMessage : false,
                     isFileMessage : false,
                     isAudioMessage: true
                 }

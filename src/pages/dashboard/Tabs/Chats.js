@@ -153,7 +153,7 @@ class Chats extends Component {
 
                                     <ul className="list-unstyled chat-list chat-user-list" id="chat-list">
                                         {
-                                            sorted.map((chat, key) =>
+                                            this.state.recentChatList.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
                                                     <Link to="#" onClick={(e) => this.openUserChat(e, chat)}>
                                                         <Media>
@@ -194,6 +194,9 @@ class Chats extends Component {
                                                                         <>
                                                                             {
                                                                                 chat.messages && (chat.messages.length > 0 && chat.messages[(chat.messages).length - 1].isImageMessage === true) ? <i className="ri-image-fill align-middle mr-1"></i> : null
+                                                                            }
+                                                                            {
+                                                                                chat.messages && (chat.messages.length > 0 && chat.messages[(chat.messages).length - 1].isAudioMessage === true) ? <i className="ri-file-music-line align-middle mr-1"></i> : null
                                                                             }
                                                                             {
                                                                                 chat.messages && (chat.messages.length > 0  && chat.messages[(chat.messages).length - 1].isFileMessage === true) ? <i className="ri-file-text-fill align-middle mr-1"></i> : null

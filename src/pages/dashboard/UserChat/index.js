@@ -15,7 +15,14 @@ import ChatInput from "./ChatInput";
 import FileList from "./FileList";
 
 //actions
-import { openUserSidebar, setFullUser, requestChat, setImage, setAudio, setFile, requestContacts } from "../../../redux/actions";
+import { openUserSidebar, 
+    setFullUser, 
+    requestChat, 
+    setImage, 
+    setAudio, 
+    setFile, 
+    requestContacts
+} from "../../../redux/actions";
 
 //Import Images
 
@@ -48,7 +55,7 @@ function UserChat(props) {
 
     useEffect(() => {
        props.requestChat();
-       props.requestContacts()
+       //props.requestContacts()
     },[]);
 
     const toggle = () => setModal(!modal);
@@ -56,8 +63,14 @@ function UserChat(props) {
     const addMessage = (message, type) => {
         var messageObj = null;
 
-        let d = new Date();
-        var n = d.getSeconds();
+        let ultima = chatMessages[chatMessages.length-1].data
+
+        var Xmas95 = new Date(); 
+        var horas  = Xmas95.getHours();
+        var minut = Xmas95.getMinutes();
+        var date = Xmas95.getDate();
+        var month  = Xmas95.getMonth() + 1;
+        var data =  date+"/"+month
 
         //matches the message type is text, file or image, and create object according to it
         switch (type) {
@@ -65,7 +78,9 @@ function UserChat(props) {
                 messageObj = {
                     id : chatMessages.length,
                     message : message,
-                    time : "00:" + n,
+                    time : horas+":"+minut,
+                    data: data,
+                    status: false,
                     userType : "sender",
                     image : zutt,
                     isFileMessage : false,
@@ -78,7 +93,9 @@ function UserChat(props) {
                 messageObj = {
                     id : chatMessages.length,
                     audioMessage : URL.createObjectURL(message),
-                    time : "00:" + n,
+                    time : horas+":"+minut,
+                    data: data,
+                    status: false,
                     userType : "sender",
                     image : zutt,
                     isFileMessage : false,
@@ -93,7 +110,9 @@ function UserChat(props) {
                     downloadURL: '',
                     fileMessage : message.name,
                     size : message.size,
-                    time : "00:" + n,
+                    time : horas+":"+minut,
+                    data: data,
+                    status: false,
                     userType : "sender", 
                     image : zutt,
                     isFileMessage : true,
@@ -111,7 +130,9 @@ function UserChat(props) {
                     id : chatMessages.length,
                     imageMessage : imageMessage,
                     size : message.size,
-                    time : "00:" + n,
+                    time : horas+":"+minut,
+                    data: data,
+                    status: false,
                     userType : "sender",
                     image : zutt,
                     isImageMessage : true,
@@ -119,7 +140,6 @@ function UserChat(props) {
                     isAudioMessage : false
                 }
                 break;
-        
             default:
                 break;
         }
@@ -132,8 +152,17 @@ function UserChat(props) {
         copyallUsers[props.active_user].isTyping = false;
         let numero = copyallUsers[props.active_user].id
 
-        let newMessage = [...chatMessages, messageObj]
+        let obj = {isToday: true, data: data}
        
+        let newMessage = []
+        if (ultima !== data) {
+             newMessage = [...chatMessages, obj]
+        } 
+        else {
+             newMessage = [...chatMessages]
+        }
+
+        
         switch (type) {
             case "textMessage":
                 props.setFullUser(messageObj, newMessage, numero);
@@ -200,7 +229,7 @@ function UserChat(props) {
                                     chatMessages.map((chat, key) => 
                                         chat.isToday && chat.isToday === true ? <li key={"dayTitle" + key}> 
                                             <div className="chat-day-title">
-                                                <span className="title">Today</span>
+                                                <span className="title">{chat.data}</span>
                                             </div>
                                         </li> : 
                                         (props.recentChatList[props.active_user].isGroup === true) ? 
@@ -369,7 +398,7 @@ function UserChat(props) {
                                                                         </p>
                                                                 }
                                                                 {
-                                                                    !chat.isTyping && <p className="chat-time mb-0"><i className="ri-time-line align-middle"></i> <span className="align-middle">{chat.time}</span></p>
+                                                                    !chat.isTyping && <p className="chat-time mb-0"><i className={chat.status ? "ri-check-line" : "ri-time-line align-middle" }></i> <span className="align-middle">{chat.time}</span></p>
                                                                 }
                                                             </div>
                                                             {
@@ -389,7 +418,7 @@ function UserChat(props) {
                                                             
                                                         </div>
                                                         {
-                                                            chatMessages[key+1] ? chatMessages[key].userType === chatMessages[key+1].userType ? null :  <div className="conversation-name">{chat.userType === "sender" ? "Patricia Smith" : props.recentChatList[props.active_user].name}</div> : <div className="conversation-name">{chat.userType === "sender" ? "Admin" : props.recentChatList[props.active_user].name}</div>
+                                                            chatMessages[key+1] ? chatMessages[key].userType === chatMessages[key+1].userType ? null :  <div className="conversation-name">{chat.userType === "sender" ?  "Zutt Salles" : props.recentChatList[props.active_user].name}</div> : <div className="conversation-name">{chat.userType === "sender" ? "Zutt Salles" : props.recentChatList[props.active_user].name}</div>
                                                         }
                                                         {/* {
                                                             <div className="conversation-name">{chat.userType === "sender" ? "Admin" : props.recentChatList[props.active_user].name}</div>
@@ -434,5 +463,13 @@ const mapStateToProps = (state) => {
     return { active_user,userSidebar };
 };
 
-export default withRouter(connect(mapStateToProps, { openUserSidebar,setFullUser, requestChat, setImage, setAudio, setFile, requestContacts })(UserChat));
+export default withRouter(connect(mapStateToProps, 
+    {openUserSidebar,
+    setFullUser, 
+    requestChat, 
+    setImage, 
+    setAudio, 
+    setFile, 
+    requestContacts})
+(UserChat));
 

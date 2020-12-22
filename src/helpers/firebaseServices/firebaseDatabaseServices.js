@@ -3,11 +3,11 @@ import {  database, storage  } from "../firebase";
 import zutt from "../../assets/images/users/zutt.png";
 
 class firebaseDatabaseServices {
-    mandarMensagem = (newMessage, numero) => {
+    mandarMensagem = (messageObj, newMessage, numero) => {
         try{
             database
               .ref("/server/talks/" + numero + "/messages")
-              .set(newMessage)
+              .set([...newMessage, {...messageObj, status:true}])
         }catch(error){
             console.log(error)
         }   

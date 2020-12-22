@@ -64,8 +64,12 @@ function* retriveContacts() {
 
 function* sender({ payload: {messageObj, newMessage, reference } }) {
     try {
-        yield call(fireBaseBackend.mandarMensagem, newMessage, reference);
-        yield call(apiBackend.sendMessages, messageObj, reference);
+       const response = yield call(apiBackend.sendMessages, messageObj, reference);
+       if (response) {
+            yield call(fireBaseBackend.mandarMensagem, messageObj, newMessage, reference);
+       } else {
+        console.log("Errou ao mandar mensagem para API")
+       }
     } catch (error) {
         yield put(requestFailed(error)); 
     }

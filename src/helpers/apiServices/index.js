@@ -21,17 +21,21 @@ class apiServices {
     }
 
     sendMessages(messageObj, reference) {
-        try {
-     		var xhr = new XMLHttpRequest();
+    	return new Promise((resolve, reject) => {
+	        try {
+	     		var xhr = new XMLHttpRequest();
 
-			xhr.open('POST', 'https://api.z-api.io/instances/38D8CC84406F2021E634BE6CF1A401E6/token/5472C5514B387077FE149946/send-messages');
+				xhr.open('POST', 'https://api.z-api.io/instances/38D8CC84406F2021E634BE6CF1A401E6/token/5472C5514B387077FE149946/send-messages');
 
-			xhr.setRequestHeader("Content-Type", "application/json");
+				xhr.setRequestHeader("Content-Type", "application/json");
 
-			xhr.send(JSON.stringify({ "phone": reference , "message": messageObj.message }));
-		} catch (error) {
-			console.log(error);
-		}
+				xhr.send(JSON.stringify({ "phone": reference , "message": messageObj.message }));
+				resolve(true)
+			} catch (error) {
+				console.log(error);
+				reject(false)
+			}
+		})	
 	}
 
 	sendImagem(image, reference) {

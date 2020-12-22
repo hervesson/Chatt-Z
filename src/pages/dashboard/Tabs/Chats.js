@@ -112,8 +112,19 @@ class Chats extends Component {
             unread.style.display="none";
         }
     }
+
     
     render() {
+        var sorted = this.state.recentChatList.sort(function (a, b) {
+          if (  a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
+                    >
+                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return -1; }
+          if (
+                a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
+                    < 
+                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return 1; } 
+            return 0;
+        });
         return (
             <React.Fragment>
                         <div>
@@ -137,12 +148,12 @@ class Chats extends Component {
 
                             {/* Start chat-message-list  */}
                             <div className="px-2">
-                                <h5 className="mb-3 px-3 font-size-16">Recent</h5>
+                                <h5 className="mb-3 px-3 font-size-16">Conversas</h5>
                                 <SimpleBar style={{ maxHeight: "100%" }} className="chat-message-list">
 
                                     <ul className="list-unstyled chat-list chat-user-list" id="chat-list">
                                         {
-                                            this.state.recentChatList.map((chat, key) =>
+                                            sorted.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
                                                     <Link to="#" onClick={(e) => this.openUserChat(e, chat)}>
                                                         <Media>

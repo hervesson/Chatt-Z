@@ -65,12 +65,13 @@ function* retriveContacts() {
 function* sender({ payload: {messageObj, newMessage, reference } }) {
     try {
        const response = yield call(apiBackend.sendMessages, messageObj, reference);
-       if (response) {
+       if (response === true) {
             yield call(fireBaseBackend.mandarMensagem, messageObj, newMessage, reference);
        } else {
         console.log("Errou ao mandar mensagem para API")
        }
     } catch (error) {
+        console.log(error)
         yield put(requestFailed(error)); 
     }
 }
@@ -78,7 +79,8 @@ function* sender({ payload: {messageObj, newMessage, reference } }) {
 function* sendImage({ payload: { chatMessages, messageObj, message, numero }  }) {
     try {
         const response = yield call(fireBaseBackend.mandarImagem, chatMessages, messageObj, message, numero);
-        yield call(apiBackend.sendImagem, response, numero);
+        const imageSend = yield call(apiBackend.sendImagem, response, numero);
+        
     } catch (error) {
         yield put(requestFailed(error)); 
     }

@@ -30,10 +30,14 @@ class apiServices {
 				xhr.setRequestHeader("Content-Type", "application/json");
 
 				xhr.send(JSON.stringify({ "phone": reference , "message": messageObj.message }));
-				resolve(true)
+				xhr.onreadystatechange = function() {
+    				if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+    					resolve(true)
+    				}
+				}
 			} catch (error) {
-				console.log(error);
 				reject(false)
+				console.log(error);
 			}
 		})	
 	}

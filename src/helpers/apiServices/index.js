@@ -42,7 +42,7 @@ class apiServices {
 		})	
 	}
 
-	sendImagem(image, reference) {
+	sendImagem(image, reference, legenda) {
         try {
      		var xhr = new XMLHttpRequest();
 
@@ -50,7 +50,7 @@ class apiServices {
 
 			xhr.setRequestHeader("Content-Type", "application/json");
 
-			xhr.send(JSON.stringify({ "phone": reference , "image": image.url }));
+			xhr.send(JSON.stringify({ "phone": reference , "image": image.url, "caption":legenda }));
 		} catch (error) {
 			console.log(error);
 		}

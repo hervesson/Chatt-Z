@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Row, Col, UncontrolledTooltip, ButtonDropdown, DropdownToggle, DropdownMenu, Label, Form } from "reactstrap";
+import { Button, Input, Row, Col, UncontrolledTooltip, ButtonDropdown, DropdownToggle, DropdownMenu, Label, Form, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import MicRecorder from 'mic-recorder-to-mp3';
 import { Picker } from 'emoji-mart'
 import 'emoji-mart/css/emoji-mart.css'
@@ -8,17 +8,23 @@ const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
+    const [textLegenda, settextLegenda] = useState("");
     const [isOpen, setisOpen] = useState(false);
     const [file, setfile] = useState('');
     const [fileImage, setfileImage] = useState("") 
     const [blobURL, setAudio] = useState('')
     const [isRecording, setRecording] = useState(false)
+    const [modal, setModal] = useState(false);
 
-    const toggle = () => setisOpen(!isOpen);
+    const toggle = () => {setfileImage(""); settextLegenda("")}
 
     //function for text input value change
     const handleChange = e => {
         settextMessage(e.target.value)
+    }
+
+    const handleChangeLegenda = e => {
+        settextLegenda(e.target.value)
     }
 
     //function for add emojis
@@ -80,8 +86,10 @@ function ChatInput(props) {
 
         //if image input value is not empty then call onaddMessage function
         if(fileImage !== "") {
-            props.onaddMessage(fileImage, "imageMessage");
-            setfileImage("")
+            props.onaddMessage(fileImage, "imageMessage", textLegenda);
+            setfileImage("");
+            settextLegenda("")
+
         }
     }
 
@@ -90,7 +98,23 @@ function ChatInput(props) {
             onaddMessage(event, textMessage)
         }
     }
+
+    const {
+        buttonLabel,
+        className
+    } = props;
    
+    function messageIdGenerator() {
+        if(fileImage !== ""){
+            const queiraBem =  URL.createObjectURL( fileImage )
+            return queiraBem
+        }else{
+            const nega = ""
+            return nega
+        }
+    }
+    
+
 
     return (
         <React.Fragment>
@@ -152,6 +176,23 @@ function ChatInput(props) {
                                                     </Button>
                                                 </li>
                                             </ul>
+                                        </div>
+                                        <div>
+                                            <Col>
+                                              <Modal isOpen={fileImage ? true : false} toggle={toggle} className={className}>
+                                                <ModalHeader toggle={toggle}>Imagem selecionada</ModalHeader>
+                                                <ModalBody>
+                                                    <img src={messageIdGenerator()} width="350" alt="chat" className="rounded border" />
+                                                    <div>
+                                                        <Input type="text" value={textLegenda} onChange={handleChangeLegenda} className="form-control form-control-lg bg-light border-light" placeholder="Digite aqui sua legenda..." />
+                                                    </div>
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <Button color="secondary" onClick={toggle}>Cancelar</Button>
+                                                    <Button color="primary" onClick={(e) => onaddMessage(e, "")}>Enviar</Button>{' '}
+                                                </ModalFooter>
+                                              </Modal>
+                                            </Col>  
                                         </div>
                                     </Col>
                                 </Row>

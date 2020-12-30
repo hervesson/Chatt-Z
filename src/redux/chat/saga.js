@@ -79,7 +79,7 @@ function* sender({ payload: {messageObj, newMessage, reference } }) {
 function* sendImage({ payload: { chatMessages, messageObj, message, numero }  }) {
     try {
         const response = yield call(fireBaseBackend.mandarImagem, chatMessages, messageObj, message, numero);
-        const imageSend = yield call(apiBackend.sendImagem, response, numero);
+        const imageSend = yield call(apiBackend.sendImagem, response, numero, messageObj.message );
         
     } catch (error) {
         yield put(requestFailed(error)); 

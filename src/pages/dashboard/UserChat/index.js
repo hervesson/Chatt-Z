@@ -56,11 +56,12 @@ function UserChat(props) {
     useEffect(() => {
        props.requestChat();
        //props.requestContacts()
-    },[]);
+    },[]); 
 
     const toggle = () => setModal(!modal);
 
-    const addMessage = (message, type) => {
+    const addMessage = (message, type, legenda="") => {
+        console.log(message, type, legenda)
         var messageObj = null;
 
         let ultima = chatMessages[chatMessages.length-1].data
@@ -129,6 +130,7 @@ function UserChat(props) {
                 messageObj = {
                     id : chatMessages.length,
                     imageMessage : imageMessage,
+                    message : legenda,
                     size : message.size,
                     time : horas+":"+minut,
                     data: data,

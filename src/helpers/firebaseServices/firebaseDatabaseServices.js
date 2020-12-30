@@ -42,6 +42,7 @@ class firebaseDatabaseServices {
                 var  messageImg = {
                     id : chatMessages.length,
                     imageMessage : imageMessage,
+                    message: messageObj.message,
                     size : message.size,
                     time : horas+":"+minut,
                     data: data,

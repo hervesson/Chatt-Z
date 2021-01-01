@@ -113,7 +113,6 @@ function ChatInput(props) {
             return nega
         }
     }
-    
 
 
     return (

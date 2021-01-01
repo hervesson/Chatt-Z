@@ -3,173 +3,122 @@ import {  database, storage  } from "../firebase";
 import zutt from "../../assets/images/users/zutt.png";
 
 class firebaseDatabaseServices {
-    mandarMensagem = (messageObj, newMessage, numero) => {
+    mandarMensagem = (messageObj, newMessage, numero, response) => {
         try{
             database
               .ref("/server/talks/" + numero + "/messages")
-              .set([...newMessage, {...messageObj, status:true}])
+              .update([...newMessage, {...messageObj, MessageId: response.MessageId, status:"send"}])
         }catch(error){
             console.log(error)
         }   
     }
 
-    mandarImagem = ( chatMessages, messageObj, message, numero ) => {
-        return new Promise((resolve, reject) => {
-        const uploadTask = storage.ref("ZuttChat/images/"+ numero + "/" + message.name).put(message);
-        uploadTask.on(
-            "state_changed",
-            snapshot => {
-              const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-              console.log(progress)
-            },
-            error => { console.log(error); reject({error})},
-            () => {
-               storage.ref("ZuttChat/images/"+ numero + "/" + message.name).getDownloadURL().then(url => {
+    mandarMessaImage(chatMessages, messageObj, message, numero, response ){
+        var imageMessage = [
+            { image : response.ImageUrl},
+        ]
 
-                resolve({url})
-                
-                var imageMessage = [
-                    { image : url},
-                ]
+        var Xmas95 = new Date(); 
+        var horas  = Xmas95.getHours();
+        var minut = Xmas95.getMinutes();
+        var date = Xmas95.getDate();
+        var month  = Xmas95.getMonth() + 1;
+        var data =  date+"/"+month
 
-                var Xmas95 = new Date(); 
-                var horas  = Xmas95.getHours();
-                var minut = Xmas95.getMinutes();
-                var date = Xmas95.getDate();
-                var month  = Xmas95.getMonth() + 1;
-                var data =  date+"/"+month
+        var  messageImg = {
+            MessageId: response.MessageId,
+            imageMessage : imageMessage,
+            message: messageObj.message,
+            size : message.size,
+            time : horas+":"+minut,
+            data: data,
+            userType : "sender",
+            image : zutt,
+            status: "send",
+            isImageMessage : true,
+            isFileMessage : false,
+            isAudioMessage: false
+        }
 
-                var  messageImg = {
-                    id : chatMessages.length,
-                    imageMessage : imageMessage,
-                    message: messageObj.message,
-                    size : message.size,
-                    time : horas+":"+minut,
-                    data: data,
-                    userType : "sender",
-                    image : zutt,
-                    isImageMessage : true,
-                    isFileMessage : false,
-                    isAudioMessage: false
-                }
-
-                let ultima = chatMessages[chatMessages.length-1].data
-                if (ultima !== data) {
-                    database.ref("/server/talks/"+ numero + "/messages").set(
-                        [...chatMessages, {isToday: true, data: data}, messageImg]
-                    )
-                } else {
-                    database.ref("/server/talks/"+ numero + "/messages").set(
-                        [...chatMessages, messageImg]
-                    )
-                }
-                });
-            }, 
-          );
-        }); 
+        let ultima = chatMessages[chatMessages.length-1].data
+        if (ultima !== data) {
+            database.ref("/server/talks/"+ numero + "/messages").update(
+                [...chatMessages, {isToday: true, data: data}, messageImg]
+            )
+        } else {
+            database.ref("/server/talks/"+ numero + "/messages").update(
+                [...chatMessages, messageImg]
+            )
+        }       
     }
 
-    mandarAudio = ( chatMessages, messageObj, message, numero ) => {
-        return new Promise((resolve, reject) => {
-        const uploadTask = storage.ref("ZuttChat/audios/"+ numero + "/" + chatMessages.length).put(message);
-        uploadTask.on(
-            "state_changed",
-            snapshot => {
-              const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-              console.log(progress)
-            },
-            error => { console.log(error); reject({error})},
-            () => {
-                storage.ref("ZuttChat/audios/"+ numero + "/" + chatMessages.length).getDownloadURL().then(url => {
+    mandarMessaAudio(chatMessages, message, numero, response){
+        var Xmas95 = new Date(); 
+        var horas  = Xmas95.getHours();
+        var minut = Xmas95.getMinutes();
+        var date = Xmas95.getDate();
+        var month  = Xmas95.getMonth() + 1;
+        var data =  date+"/"+month
 
-                resolve({url})
+        var  messageAud = {
+            MessageId: response.MessageId,
+            audioMessage : response.AudioUrl,
+            size : message.size,
+            time : horas+":"+minut,
+            data: data,
+            userType : "sender",
+            image : zutt,   
+            status: "send",
+            isImageMessage : false,
+            isFileMessage : false,
+            isAudioMessage: true
+        }
 
-                var Xmas95 = new Date(); 
-                var horas  = Xmas95.getHours();
-                var minut = Xmas95.getMinutes();
-                var date = Xmas95.getDate();
-                var month  = Xmas95.getMonth() + 1;
-                var data =  date+"/"+month
-
-                var  messageAud = {
-                    id : chatMessages.length,
-                    audioMessage : url,
-                    size : message.size,
-                    time : horas+":"+minut,
-                    data: data,
-                    userType : "sender",
-                    image : zutt,
-                    isImageMessage : false,
-                    isFileMessage : false,
-                    isAudioMessage: true
-                }
-
-                let ultima = chatMessages[chatMessages.length-1].data
-                if (ultima !== data) {
-                    database.ref("/server/talks/"+ numero + "/messages").set(
-                        [...chatMessages, {isToday: true, data: data}, messageAud]
-                    )
-                } else {
-                    database.ref("/server/talks/"+ numero + "/messages").set(
-                        [...chatMessages, messageAud]
-                    )
-                }
-                });
-            }, 
-          );
-        }); 
+        let ultima = chatMessages[chatMessages.length-1].data
+        if (ultima !== data) {
+            database.ref("/server/talks/"+ numero + "/messages").update(
+                [...chatMessages, {isToday: true, data: data}, messageAud]
+            )
+        } else {
+            database.ref("/server/talks/"+ numero + "/messages").update(
+                [...chatMessages, messageAud]
+            )
+        }
     }
 
-    mandarArquivo = ( chatMessages, messageObj, message, numero ) => {
-        return new Promise((resolve, reject) => {
-        const uploadTask = storage.ref("ZuttChat/files/"+ numero + "/" + chatMessages.length).put(message);
-        uploadTask.on(
-            "state_changed",
-            snapshot => {
-              const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-              console.log(progress)
-            },
-            error => { console.log(error); reject({error})},
-            () => {
-               storage.ref("ZuttChat/files/"+ numero + "/" + chatMessages.length).getDownloadURL().then(url => {
+    mandarMessaArquivo(chatMessages, message, numero, response){
+        var Xmas95 = new Date(); 
+        var horas  = Xmas95.getHours();
+        var minut = Xmas95.getMinutes();
+        var date = Xmas95.getDate();
+        var month  = Xmas95.getMonth() + 1;
+        var data =  date+"/"+month
 
-                resolve({url})
+        var messageFile = {
+            MessageId: response.MessageId,
+            downloadURL: response.DocumentUrl,
+            fileMessage : message.name,
+            size : message.size,
+            time : horas+":"+minut,
+            data: data,
+            status: "send",
+            userType : "sender", 
+            image : zutt,
+            isFileMessage : true,
+            isImageMessage : false,
+            isAudioMessage : false
+        }
 
-                var Xmas95 = new Date(); 
-                var horas  = Xmas95.getHours();
-                var minut = Xmas95.getMinutes();
-                var date = Xmas95.getDate();
-                var month  = Xmas95.getMonth() + 1;
-                var data =  date+"/"+month
-
-                var messageFile = {
-                    id : chatMessages.length,
-                    downloadURL: url,
-                    fileMessage : message.name,
-                    size : message.size,
-                    time : horas+":"+minut,
-                    data: data,
-                    userType : "sender", 
-                    image : zutt,
-                    isFileMessage : true,
-                    isImageMessage : false,
-                    isAudioMessage : false
-                }
-
-                let ultima = chatMessages[chatMessages.length-1].data
-                if (ultima !== data) {
-                    database.ref("/server/talks/"+ numero + "/messages").set(
-                        [...chatMessages, {isToday: true, data: data}, messageFile]
-                    )
-                } else {
-                    database.ref("/server/talks/"+ numero + "/messages").set(
-                        [...chatMessages, messageFile]
-                    )
-                }
-                });
-            }, 
-          );
-        }); 
+        let ultima = chatMessages[chatMessages.length-1].data
+        if (ultima !== data) {
+            database.ref("/server/talks/"+ numero + "/messages").update(
+                [...chatMessages, {isToday: true, data: data}, messageFile]
+            )
+        } else {
+            database.ref("/server/talks/"+ numero + "/messages").update(
+                [...chatMessages, messageFile]
+            )
+        }    
     }
 }
 

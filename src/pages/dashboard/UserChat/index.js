@@ -77,7 +77,6 @@ function UserChat(props) {
         switch (type) {
             case "textMessage":
                 messageObj = {
-                    id : chatMessages.length,
                     message : message,
                     time : horas+":"+minut,
                     data: data,
@@ -92,7 +91,6 @@ function UserChat(props) {
 
             case "audioMessage":
                 messageObj = {
-                    id : chatMessages.length,
                     audioMessage : URL.createObjectURL(message),
                     time : horas+":"+minut,
                     data: data,
@@ -107,7 +105,6 @@ function UserChat(props) {
 
             case "fileMessage":
                 messageObj = {
-                    id : chatMessages.length,
                     downloadURL: '',
                     fileMessage : message.name,
                     size : message.size,
@@ -128,7 +125,6 @@ function UserChat(props) {
                 ]
 
                 messageObj = {
-                    id : chatMessages.length,
                     imageMessage : imageMessage,
                     message : legenda,
                     size : message.size,
@@ -145,8 +141,7 @@ function UserChat(props) {
             default:
                 break;
         }
-        //console.log(messageObj)
-        //add message object to chat        
+     
         setchatMessages([...chatMessages, messageObj]);
 
         let copyallUsers = props.recentChatList;
@@ -207,6 +202,25 @@ function UserChat(props) {
         setchatMessages(filtered);
     }
 
+    const status = (status) => {
+        switch (status) {
+            case "RECEIVED":
+                return(<i className={ "ri-check-double-fill" }></i>)
+                
+            case "READ":
+                return(<i className={ "ri-check-double-fill" } style={{color: 'blue'}}></i>)
+
+            case "PLAYED":
+                return(<i className={ "ri-check-double-fill" } style={{color: 'blue'}}></i>)
+
+            case "send":
+                return(<i className={ "ri-check-line" }></i>)
+        
+            default:
+            return(<i className={ "ri-time-line align-middle" }></i>)
+            
+        }
+    }
     
     return (
         <React.Fragment>
@@ -264,7 +278,7 @@ function UserChat(props) {
                                                                 }
                                                                 {
                                                                     chat.audioMessage &&
-                                                                       <audio src={chat.audioMessage} controls="controls" />
+                                                                       <audio src={chat.audioMessage} controls="controls"/>
                                                                         
                                                                 }
                                                                 {
@@ -369,7 +383,7 @@ function UserChat(props) {
                                                                         <p className="mb-0">
                                                                            audio
                                                                         </p>
-                                                                        <audio src={chat.audioMessage} controls="controls" />
+                                                                        <audio src={chat.audioMessage} controls="controls" style={{backgroundColor: chat.status == "PLAYED" ? "#17202a" : null}} />
                                                                     </div>  
                                                                         
                                                                 }
@@ -401,7 +415,7 @@ function UserChat(props) {
                                                                 }
                                                                 {
                                                                     !chat.isTyping && <p className="chat-time mb-0">
-                                                                        {chat.userType === "sender" ? <i className={chat.status ? "ri-check-line" : "ri-time-line align-middle" }></i> : null}
+                                                                        {chat.userType === "sender" ? status(chat.status) : null}
                                                                          
                                                                         <span className="align-middle">{chat.time}
                                                                         </span>

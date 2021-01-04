@@ -4,18 +4,17 @@ import MicRecorder from 'mic-recorder-to-mp3';
 import { Picker } from 'emoji-mart'
 import 'emoji-mart/css/emoji-mart.css'
 
-const Mp3Recorder = new MicRecorder({ bitRate: 128 });
+const Mp3Recorder = new MicRecorder({ bitRate: 128 }); 
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
     const [textLegenda, settextLegenda] = useState("");
-    const [isOpen, setisOpen] = useState(false);
+    const [isOpen] = useState(false);
     const [file, setfile] = useState('');
     const [fileImage, setfileImage] = useState("") 
     const [blobURL, setAudio] = useState('')
     const [isRecording, setRecording] = useState(false)
-    const [modal, setModal] = useState(false);
-
+   
     const toggle = () => {setfileImage(""); settextLegenda("")}
 
     //function for text input value change
@@ -100,7 +99,6 @@ function ChatInput(props) {
     }
 
     const {
-        buttonLabel,
         className
     } = props;
    

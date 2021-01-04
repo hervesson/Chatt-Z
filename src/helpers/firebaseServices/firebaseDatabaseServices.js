@@ -1,4 +1,4 @@
-import {  database, storage  } from "../firebase";
+import { database } from "../firebase";
 
 import zutt from "../../assets/images/users/zutt.png";
 
@@ -120,7 +120,16 @@ class firebaseDatabaseServices {
             )
         }    
     }
+
+    apagarNaoLidas(numero){
+        if(numero !== 0){
+            database.ref("/server/talks/"+ numero + "/unRead").transaction(function(read) {
+                return 0;
+            })
+        }    
+    }
 }
+
 
 
 export { firebaseDatabaseServices };

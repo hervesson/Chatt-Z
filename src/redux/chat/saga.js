@@ -17,6 +17,7 @@ import {
     SET_IMAGE,
     SET_AUDIO,
     SET_FILE,
+    DELETE_READ
 } from './constants';
 
 
@@ -109,6 +110,14 @@ function* sendFile({ payload: { chatMessages, messageObj, message, numero }  }) 
     }
 }
 
+function* deleteRead({ payload: numero }) {
+    try {
+        yield call(fireBaseDatabaseBackend.apagarNaoLidas, numero);
+    } catch (error) {
+        yield put(requestFailed(error)); 
+    }
+}
+
 
 export function* watchChats() {
     yield takeEvery(REQUEST_CHAT, retriveData);
@@ -134,6 +143,10 @@ export function* senderFile() {
     yield takeEvery(SET_FILE, sendFile);
 }
 
+export function* deletaRead() {
+    yield takeEvery(DELETE_READ, deleteRead);
+}
+
 
 
 
@@ -145,6 +158,7 @@ function* chatSaga() {
         fork(senderImage),
         fork(senderAudio),
         fork(senderFile), 
+        fork(deletaRead)
     ]);
 }
 

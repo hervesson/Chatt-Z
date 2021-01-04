@@ -11,8 +11,7 @@ export const SET_AUDIO = "SET_AUDIO";
 export const SET_FILE = "SET_FILE";
 export const REQUEST_CONTACTS = "REQUEST_CONTACTS";
 export const CONTACTS_SUCESS = "CONTACTS_SUCESS";
-
-
+export const DELETE_READ = "DELETE_READ";
 
 
 

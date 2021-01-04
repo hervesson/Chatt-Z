@@ -1,5 +1,5 @@
 import {
-    CHAT_USER, ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS, REQUEST_FAILED, SET_IMAGE, SET_AUDIO, SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS
+    CHAT_USER, ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS, REQUEST_FAILED, SET_IMAGE, SET_AUDIO, SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS, DELETE_READ
 } from './constants';
 
 //Import Images
@@ -71,10 +71,13 @@ const Chat = (state = INIT_STATE, action) => {
             }
 
         case REQUEST_CONTACTS:
-            return { ...state,  };
+            return { ...state, loading: true };
 
         case CONTACTS_SUCESS:
-            return { ...state, contacts: action.payload };        
+            return { ...state, contacts: action.payload, loading: false };
+
+        case DELETE_READ:
+            return { ...state };            
             
     default: return { ...state };
     }

@@ -115,16 +115,6 @@ class Chats extends Component {
 
     
     render() {
-        var sorted = this.state.recentChatList.sort(function (a, b) {
-          if (  a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
-                    >
-                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return -1; }
-          if (
-                a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
-                    < 
-                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return 1; } 
-            return 0;
-        });
         return (
             <React.Fragment>
                         <div>

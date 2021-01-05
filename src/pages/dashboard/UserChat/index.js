@@ -21,8 +21,7 @@ import { openUserSidebar,
     setImage, 
     setAudio, 
     setFile, 
-    requestContacts,
-    deleteRead
+    requestContacts
 } from "../../../redux/actions";
 
 //Import Images
@@ -58,11 +57,6 @@ function UserChat(props) {
        props.requestChat();
        //props.requestContacts()
     },[]); 
-
-    var read = props.recentChatList[props.active_user].unRead
-    useEffect(() => {
-        props.deleteRead(props.recentChatList[props.active_user].id) 
-    }, [read])
 
     const toggle = () => setModal(!modal);
 
@@ -497,7 +491,6 @@ export default withRouter(connect(mapStateToProps,
     setImage, 
     setAudio, 
     setFile, 
-    requestContacts, 
-    deleteRead})
+    requestContacts})
 (UserChat));
 

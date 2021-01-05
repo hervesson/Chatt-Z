@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import SimpleBar from "simplebar-react";
 
 //actions
-import { setconversationNameInOpenChat, activeUser } from "../../../redux/actions"
+import { setconversationNameInOpenChat, activeUser, deleteRead } from "../../../redux/actions"
 
 //components
 import OnlineUsers from "./OnlineUsers";
@@ -38,6 +38,7 @@ class Chats extends Component {
             });
             this.props.recentChatList.forEach((item, index) => {if(item.id == this.state.chat.id){
                 this.props.activeUser(index);
+                this.props.deleteRead(item.id)
             }});   
         }
     }
@@ -77,7 +78,7 @@ class Chats extends Component {
         var index = this.props.recentChatList.indexOf(chat);
 
         // set activeUser 
-        this.props.activeUser(index);
+        this.props.activeUser(index); 
 
         var chatList = document.getElementById("chat-list");
         var clickedItem = e.target;
@@ -160,7 +161,7 @@ class Chats extends Component {
                                         {
                                             this.state.recentChatList.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
-                                                    <Link to="#" onClick={(e) => this.openUserChat(e, chat)}>
+                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id)}}>
                                                         <Media>
                                                             {
                                                                 chat.profilePicture === "Null" ?
@@ -241,4 +242,4 @@ const mapStateToProps = (state) => {
     return { active_user };
 };
 
-export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser })(Chats);
+export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser, deleteRead })(Chats);

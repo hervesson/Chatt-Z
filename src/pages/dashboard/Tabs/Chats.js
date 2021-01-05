@@ -16,6 +16,7 @@ class Chats extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            chat: '',
             searchChat : "",
             recentChatList : this.props.recentChatList
         }
@@ -32,9 +33,12 @@ class Chats extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
-          this.setState({
-            recentChatList : this.props.recentChatList
-          });
+            this.setState({
+                recentChatList : this.props.recentChatList
+            });
+            this.props.recentChatList.forEach((item, index) => {if(item.id == this.state.chat.id){
+                this.props.activeUser(index);
+            }});   
         }
     }
 
@@ -66,7 +70,7 @@ class Chats extends Component {
     }
 
     openUserChat(e,chat) {
-
+        this.setState({chat: chat})
         e.preventDefault();
 
         //find index of current chat in array
@@ -113,8 +117,19 @@ class Chats extends Component {
         }
     }
 
+
     
     render() {
+        var sorted = this.state.recentChatList.sort(function (a, b) {
+          if (  a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
+                    >
+                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return -1; }
+          if (
+                a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
+                    < 
+                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return 1; } 
+            return 0;
+        });
         return (
             <React.Fragment>
                         <div>

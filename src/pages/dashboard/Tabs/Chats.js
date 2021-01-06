@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input, InputGroupAddon, InputGroup, Media, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-
+import moment from 'moment'; 
 //simplebar
 import SimpleBar from "simplebar-react";
 
@@ -122,13 +122,16 @@ class Chats extends Component {
     
     render() {
         var sorted = this.state.recentChatList.sort(function (a, b) {
-          if (  a.messages[(a.messages).length - 1].time 
-                    >
-                b.messages[(b.messages).length - 1].time ) { return -1; }
-          if (
-                a.messages[(a.messages).length - 1].time
-                    < 
-                b.messages[(b.messages).length - 1].time) { return 1; } 
+            if (    new moment( a.messages[(a.messages).length - 1].time ).format() 
+                        >
+                    new moment( b.messages[(b.messages).length - 1].time ).format()    
+            ) { return -1; }
+            if (
+                    new moment( a.messages[(a.messages).length - 1].time ).format()
+                        < 
+                    new moment( b.messages[(b.messages).length - 1].time ).format()  
+            ) 
+            { return 1; } 
             return 0;
         });
         return (
@@ -210,12 +213,9 @@ class Chats extends Component {
                                                                             {chat.messages && chat.messages.length > 0 ?  chat.messages[(chat.messages).length - 1].message : null}
                                                                        </>
                                                                     }
-
-                                                    
-                                                                    
                                                                 </p>
                                                             </Media>
-                                                            <div className="font-size-11">{chat.messages && chat.messages.length > 0 ?  chat.messages[(chat.messages).length - 1].time : null}</div>
+                                                            <div className="font-size-11">{chat.messages && chat.messages.length > 0 ?  moment(chat.messages[(chat.messages).length - 1].time).format("HH:mm") : null}</div>
                                                             {chat.unRead === 0 ? null :
                                                                 <div className="unread-message" id={"unRead" + chat.id}>
                                                                     <span className="badge badge-soft-danger badge-pill">{chat.messages && chat.messages.length > 0 ? chat.unRead >= 20 ? chat.unRead + "+" : chat.unRead  : ""}</span>

@@ -10,7 +10,7 @@ import SimpleBar from "simplebar-react";
 import { setconversationNameInOpenChat, activeUser, deleteRead } from "../../../redux/actions"
 
 //components
-import OnlineUsers from "./OnlineUsers";
+//import OnlineUsers from "./OnlineUsers";
 
 class Chats extends Component {
     constructor(props) {
@@ -36,7 +36,7 @@ class Chats extends Component {
             this.setState({
                 recentChatList : this.props.recentChatList
             });
-            this.props.recentChatList.forEach((item, index) => {if(item.id == this.state.chat.id){
+            this.props.recentChatList.forEach((item, index) => {if(item.id === this.state.chat.id){
                 this.props.activeUser(index);
                 this.props.deleteRead(item.id)
             }});   
@@ -122,13 +122,13 @@ class Chats extends Component {
     
     render() {
         var sorted = this.state.recentChatList.sort(function (a, b) {
-          if (  a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
+          if (  a.messages[(a.messages).length - 1].time 
                     >
-                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return -1; }
+                b.messages[(b.messages).length - 1].time ) { return -1; }
           if (
-                a.messages[(a.messages).length - 1].data+a.messages[(a.messages).length - 1].time 
+                a.messages[(a.messages).length - 1].time
                     < 
-                b.messages[(b.messages).length - 1].data+b.messages[(b.messages).length - 1].time) { return 1; } 
+                b.messages[(b.messages).length - 1].time) { return 1; } 
             return 0;
         });
         return (
@@ -149,13 +149,13 @@ class Chats extends Component {
                                 {/* Search Box */}
                             </div> 
 
-                            {/* online users */}
-                            <OnlineUsers />
+                            {/* online users <OnlineUsers />*/}
+                            
 
                             {/* Start chat-message-list  */}
                             <div className="px-2">
                                 <h5 className="mb-3 px-3 font-size-16">Conversas</h5>
-                                <SimpleBar style={{ maxHeight: "100%" }} className="chat-message-list">
+                                <SimpleBar style={{ height: 440 }} className="chat-message-list">
 
                                     <ul className="list-unstyled chat-list chat-user-list" id="chat-list">
                                         {

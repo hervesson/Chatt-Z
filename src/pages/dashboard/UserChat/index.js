@@ -1,6 +1,7 @@
 import React, { useState,useEffect, useRef } from 'react';
 import { DropdownMenu, DropdownItem, DropdownToggle, UncontrolledDropdown, Modal, ModalHeader, ModalBody, CardBody, Button, ModalFooter } from "reactstrap";
 import { connect } from "react-redux";
+import moment from 'moment'; 
 
 import SimpleBar from "simplebar-react";
 
@@ -61,25 +62,19 @@ function UserChat(props) {
     const toggle = () => setModal(!modal);
 
     const addMessage = (message, type, legenda="") => {
-        console.log(message, type, legenda)
         var messageObj = null;
 
-        let ultima = chatMessages[chatMessages.length-1].data
+        let ultima = chatMessages[chatMessages.length-1].time
 
-        var Xmas95 = new Date(); 
-        var horas  = Xmas95.getHours();
-        var minut = Xmas95.getMinutes();
-        var date = Xmas95.getDate();
-        var month  = Xmas95.getMonth() + 1;
-        var data =  date+"/"+month
+        var lastTime = moment(ultima).format("DD/MM");
+        var currentDate = moment(new Date().getTime()).format("DD/MM")
 
         //matches the message type is text, file or image, and create object according to it
         switch (type) {
             case "textMessage":
                 messageObj = {
                     message : message,
-                    time : horas+":"+minut,
-                    data: data,
+                    time : new Date().getTime(),
                     status: false,
                     userType : "sender",
                     image : zutt,
@@ -92,8 +87,7 @@ function UserChat(props) {
             case "audioMessage":
                 messageObj = {
                     audioMessage : URL.createObjectURL(message),
-                    time : horas+":"+minut,
-                    data: data,
+                    time : new Date().getTime(),
                     status: false,
                     userType : "sender",
                     image : zutt,
@@ -108,8 +102,7 @@ function UserChat(props) {
                     downloadURL: '',
                     fileMessage : message.name,
                     size : message.size,
-                    time : horas+":"+minut,
-                    data: data,
+                    time : new Date().getTime(),
                     status: false,
                     userType : "sender", 
                     image : zutt,
@@ -127,9 +120,7 @@ function UserChat(props) {
                 messageObj = {
                     imageMessage : imageMessage,
                     message : legenda,
-                    size : message.size,
-                    time : horas+":"+minut,
-                    data: data,
+                    time : new Date().getTime(),
                     status: false,
                     userType : "sender",
                     image : zutt,
@@ -149,10 +140,10 @@ function UserChat(props) {
         copyallUsers[props.active_user].isTyping = false;
         let numero = copyallUsers[props.active_user].id
 
-        let obj = {isToday: true, data: data}
+        let obj = {isToday: true, data: currentDate}
        
         let newMessage = []
-        if (ultima !== data) {
+        if (lastTime !== currentDate) {
              newMessage = [...chatMessages, obj]
         } 
         else {
@@ -383,7 +374,7 @@ function UserChat(props) {
                                                                         <p className="mb-0">
                                                                            audio
                                                                         </p>
-                                                                        <audio src={chat.audioMessage} controls="controls" style={{backgroundColor: chat.status == "PLAYED" ? "#17202a" : null}} />
+                                                                        <audio src={chat.audioMessage} controls="controls" style={{backgroundColor: chat.status === "PLAYED" ? "#17202a" : null}} />
                                                                     </div>  
                                                                         
                                                                 }

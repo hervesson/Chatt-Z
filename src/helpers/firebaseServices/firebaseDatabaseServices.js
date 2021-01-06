@@ -1,5 +1,5 @@
 import { database } from "../firebase";
-
+import moment from 'moment'; 
 import zutt from "../../assets/images/users/zutt.png";
 
 class firebaseDatabaseServices {
@@ -14,24 +14,21 @@ class firebaseDatabaseServices {
     }
 
     mandarMessaImage(chatMessages, messageObj, message, numero, response ){
+
+        let ultima = chatMessages[chatMessages.length-1].time
+        var lastTime = moment(ultima).format("DD/MM");
+        var currentDate = moment(new Date().getTime()).format("DD/MM")
+
         var imageMessage = [
             { image : response.ImageUrl},
         ]
-
-        var Xmas95 = new Date(); 
-        var horas  = Xmas95.getHours();
-        var minut = Xmas95.getMinutes();
-        var date = Xmas95.getDate();
-        var month  = Xmas95.getMonth() + 1;
-        var data =  date+"/"+month
 
         var  messageImg = {
             MessageId: response.MessageId,
             imageMessage : imageMessage,
             message: messageObj.message,
             size : message.size,
-            time : horas+":"+minut,
-            data: data,
+            time : new Date().getTime(),
             userType : "sender",
             image : zutt,
             status: "send",
@@ -40,10 +37,9 @@ class firebaseDatabaseServices {
             isAudioMessage: false
         }
 
-        let ultima = chatMessages[chatMessages.length-1].data
-        if (ultima !== data) {
+        if (lastTime !== currentDate) {
             database.ref("/server/talks/"+ numero + "/messages").update(
-                [...chatMessages, {isToday: true, data: data}, messageImg]
+                [...chatMessages, {isToday: true, data: currentDate}, messageImg]
             )
         } else {
             database.ref("/server/talks/"+ numero + "/messages").update(
@@ -53,19 +49,16 @@ class firebaseDatabaseServices {
     }
 
     mandarMessaAudio(chatMessages, message, numero, response){
-        var Xmas95 = new Date(); 
-        var horas  = Xmas95.getHours();
-        var minut = Xmas95.getMinutes();
-        var date = Xmas95.getDate();
-        var month  = Xmas95.getMonth() + 1;
-        var data =  date+"/"+month
+
+        let ultima = chatMessages[chatMessages.length-1].time
+        var lastTime = moment(ultima).format("DD/MM");
+        var currentDate = moment(new Date().getTime()).format("DD/MM")
 
         var  messageAud = {
             MessageId: response.MessageId,
             audioMessage : response.AudioUrl,
             size : message.size,
-            time : horas+":"+minut,
-            data: data,
+            time : new Date().getTime(),
             userType : "sender",
             image : zutt,   
             status: "send",
@@ -74,10 +67,9 @@ class firebaseDatabaseServices {
             isAudioMessage: true
         }
 
-        let ultima = chatMessages[chatMessages.length-1].data
-        if (ultima !== data) {
+        if (lastTime !== currentDate) {
             database.ref("/server/talks/"+ numero + "/messages").update(
-                [...chatMessages, {isToday: true, data: data}, messageAud]
+                [...chatMessages, {isToday: true, data: currentDate}, messageAud]
             )
         } else {
             database.ref("/server/talks/"+ numero + "/messages").update(
@@ -87,20 +79,17 @@ class firebaseDatabaseServices {
     }
 
     mandarMessaArquivo(chatMessages, message, numero, response){
-        var Xmas95 = new Date(); 
-        var horas  = Xmas95.getHours();
-        var minut = Xmas95.getMinutes();
-        var date = Xmas95.getDate();
-        var month  = Xmas95.getMonth() + 1;
-        var data =  date+"/"+month
+
+        let ultima = chatMessages[chatMessages.length-1].time
+        var lastTime = moment(ultima).format("DD/MM");
+        var currentDate = moment(new Date().getTime()).format("DD/MM")
 
         var messageFile = {
             MessageId: response.MessageId,
             downloadURL: response.DocumentUrl,
             fileMessage : message.name,
             size : message.size,
-            time : horas+":"+minut,
-            data: data,
+            time : new Date().getTime(),
             status: "send",
             userType : "sender", 
             image : zutt,
@@ -109,10 +98,9 @@ class firebaseDatabaseServices {
             isAudioMessage : false
         }
 
-        let ultima = chatMessages[chatMessages.length-1].data
-        if (ultima !== data) {
+        if (lastTime !== currentDate) {
             database.ref("/server/talks/"+ numero + "/messages").update(
-                [...chatMessages, {isToday: true, data: data}, messageFile]
+                [...chatMessages, {isToday: true, data: currentDate}, messageFile]
             )
         } else {
             database.ref("/server/talks/"+ numero + "/messages").update(

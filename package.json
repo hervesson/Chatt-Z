@@ -2,8 +2,8 @@
   "name": "chatvia",
   "version": "0.1.0",
   "engines": {
-      "node": "10.13.0"
-   },
+    "node": "10.13.0"
+  },
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -24,6 +24,7 @@
     "i18next-browser-languagedetector": "^6.0.0",
     "jwt-decode": "^2.2.0",
     "mic-recorder-to-mp3": "^2.2.2",
+    "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "path": "^0.12.7",
     "react": "^16.13.1",

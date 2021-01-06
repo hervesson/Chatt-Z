@@ -212,6 +212,13 @@ function UserChat(props) {
             
         }
     }
+
+    const time = (time) => {
+        var esseTime = moment(time).format("HH:mm");
+        return(
+            <span className="align-middle">{esseTime}</span>
+        )
+    }
     
     return (
         <React.Fragment>
@@ -408,8 +415,8 @@ function UserChat(props) {
                                                                     !chat.isTyping && <p className="chat-time mb-0">
                                                                         {chat.userType === "sender" ? status(chat.status) : null}
                                                                          
-                                                                        <span className="align-middle">{chat.time}
-                                                                        </span>
+                                                                        {time(chat.time)}
+                                                                       
                                                                     </p>
                                                                 }
                                                             </div>

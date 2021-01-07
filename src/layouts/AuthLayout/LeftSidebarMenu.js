@@ -76,7 +76,7 @@ function LeftSidebarMenu(props) {
                 {/* end navbar-brand-box  */}
 
                 {/* Start side-menu nav */}
-                <div className="flex-lg-column my-auto">
+                <div className="flex-lg-column">
                     <Nav pills className="side-menu-nav justify-content-center" role="tablist">
                         <NavItem id="profile">
                             <NavLink id="pills-user-tab" className={classnames({ active: activeTab === 'profile' })} onClick={() => { toggleTab('profile'); }}>
@@ -132,10 +132,12 @@ function LeftSidebarMenu(props) {
                     </Nav>
                 </div>
                 {/* end side-menu nav */}
+                {/*
 
+                */}
                 <div className="flex-lg-column d-none d-lg-block">
                     <Nav className="side-menu-nav justify-content-center">
-                        <Dropdown nav direction="right" isOpen={dropdownOpen2} className="btn-group dropup profile-user-dropdown" toggle={toggle2}>
+                        {/*<Dropdown nav direction="right" isOpen={dropdownOpen2} className="btn-group dropup profile-user-dropdown" toggle={toggle2}>
                             <DropdownToggle nav>
                             <i className="ri-global-line"></i>
                             </DropdownToggle>
@@ -168,7 +170,7 @@ function LeftSidebarMenu(props) {
                             <UncontrolledTooltip target="light-dark" placement="right">
                                 Dark / Light Mode
                             </UncontrolledTooltip>
-                        </NavItem>
+                        </NavItem>*/}
                         <Dropdown nav isOpen={dropdownOpen} className="btn-group dropup profile-user-dropdown" toggle={toggle}>
                             <DropdownToggle nav>
                             <img src={avatar1} alt="" className="profile-user rounded-circle" />

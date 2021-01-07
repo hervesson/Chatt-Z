@@ -147,7 +147,7 @@ const Login = (props) => {
 
                         <div className="mt-5 text-center">
                             <p>{t("Don't have an account")} ? <Link to="register" className="font-weight-medium text-primary"> {t('Signup now')} </Link> </p>
-                            <p>© {t('2020 Chatvia')}. {t('Crafted with')} <i className="mdi mdi-heart text-danger"></i> {t('by Themesbrand')}</p>
+                            <p>© {t('2020 ZuttChat')} {t('by Themesbrand')}</p>
                         </div>
                     </Col>
                 </Row>

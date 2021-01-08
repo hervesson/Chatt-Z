@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Input, InputGroupAddon, InputGroup, Media, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import moment from 'moment'; 
+import * as moment from 'moment';
+import 'moment/locale/pt-br';
 //simplebar
 import SimpleBar from "simplebar-react";
 
@@ -118,7 +119,22 @@ class Chats extends Component {
         }
     }
 
+    renderTime(time){
+        const now = moment().format('L');
+        const data = moment(time).format('L');
+        var date1 = moment({ day:moment(time).format("DD"), month: moment(time).format("MM"), year:moment(time).format("YYYY") });
+        var date2 = moment({ day:moment().format("DD"), month: moment().format("MM"), year:moment().format("YYYY") });
 
+        if(now == data){
+            return moment(time).format('HH:mm')
+        }else if(date2.diff(date1, 'days') == 1){
+            return "Ontem"
+        }else if(date2.diff(date1, 'days') < 7){
+            return moment(time).locale('pt-br').format('dddd')
+        }else if(moment(time).format("YYYY") == "2020"){
+            return moment(time).format('DD/MM/YYYY')
+        }  
+    }
     
     render() {
         var sorted = this.state.recentChatList.sort(function (a, b) {
@@ -126,8 +142,7 @@ class Chats extends Component {
                         >
                     new moment( b.messages[(b.messages).length - 1].time ).format()    
             ) { return -1; }
-            if (
-                    new moment( a.messages[(a.messages).length - 1].time ).format()
+            if (    new moment( a.messages[(a.messages).length - 1].time ).format()
                         < 
                     new moment( b.messages[(b.messages).length - 1].time ).format()  
             ) 
@@ -215,7 +230,7 @@ class Chats extends Component {
                                                                     }
                                                                 </p>
                                                             </Media>
-                                                            <div className="font-size-11">{chat.messages && chat.messages.length > 0 ?  moment(chat.messages[(chat.messages).length - 1].time).format("HH:mm") : null}</div>
+                                                            <div className="font-size-11">{chat.messages && chat.messages.length > 0 ?  this.renderTime(chat.messages[(chat.messages).length - 1].time) : null}</div>
                                                             {chat.unRead === 0 ? null :
                                                                 <div className="unread-message" id={"unRead" + chat.id}>
                                                                     <span className="badge badge-soft-danger badge-pill">{chat.messages && chat.messages.length > 0 ? chat.unRead >= 20 ? chat.unRead + "+" : chat.unRead  : ""}</span>

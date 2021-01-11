@@ -251,7 +251,7 @@ function UserChat(props) {
                                                 <div className="conversation-list">
                                                     
                                                     <div className="chat-avatar">
-                                                    {chat.userType === "sender" ?   <img src={zutt} alt="chatvia" /> : 
+                                                    {chat.userType === "sender" ?   <img src={zutt} alt="ZuttChat" /> : 
                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                             <div className="avatar-xs">
@@ -260,7 +260,7 @@ function UserChat(props) {
                                                                                 </span>
                                                                             </div>
                                                                         </div>
-                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="chatvia" />
+                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="ZuttChat" />
                                                     }
                                                     </div>
                 
@@ -338,7 +338,7 @@ function UserChat(props) {
                                                             </div>
                                                             :  
                                                                 <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="chatvia" /> : 
+                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="ZuttChat" /> : 
                                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                                             <div className="avatar-xs">
@@ -347,11 +347,11 @@ function UserChat(props) {
                                                                                                 </span>
                                                                                             </div>
                                                                                         </div>
-                                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="chatvia" />
+                                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="ZuttChat" />
                                                                     }
                                                                 </div>
                                                             :   <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="chatvia" /> : 
+                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="ZuttChat" /> : 
                                                                         props.recentChatList[props.active_user].profilePicture === "Null" ?
                                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                                             <div className="avatar-xs">
@@ -360,7 +360,7 @@ function UserChat(props) {
                                                                                                 </span>
                                                                                             </div>
                                                                                         </div>
-                                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="chatvia" />
+                                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="ZuttChat" />
                                                                     }
                                                                 </div>
                                                         }

@@ -77,7 +77,7 @@ function UserProfileSidebar(props) {
                                                 {props.activeUser.name.charAt(0)}
                                             </span>
                                         </div>
-                                    : <img src={props.activeUser.profilePicture} className="rounded-circle avatar-lg img-thumbnail" alt="chatvia" />
+                                    : <img src={props.activeUser.profilePicture} className="rounded-circle avatar-lg img-thumbnail" alt="Z-Chat" />
                                 }
                                 
                             </div>
@@ -220,7 +220,7 @@ function UserProfileSidebar(props) {
                                                             <Media className="align-items-center">
                                                                 <div className="chat-avatar">
                                                                     
-                                                                    <img src={avatar7} className="rounded-circle chat-user-img avatar-xs mr-3" alt="chatvia" />
+                                                                    <img src={avatar7} className="rounded-circle chat-user-img avatar-xs mr-3" alt="Z-Chat" />
                                                                 </div>
                                                                 <Media body>
                                                                     <div className="text-left">

@@ -47,7 +47,7 @@ function UserHead(props) {
                                         {
                                             props.users[props.active_user].profilePicture !== "Null" ?
                                                 <div className="mr-3">
-                                                    <img src={props.users[props.active_user].profilePicture} className="rounded-circle avatar-xs" alt="chatvia" />
+                                                    <img src={props.users[props.active_user].profilePicture} className="rounded-circle avatar-xs" alt="Z-Chat" />
                                                 </div>
                                             :   <div className="chat-user-img align-self-center mr-3">
                                                     <div className="avatar-xs">

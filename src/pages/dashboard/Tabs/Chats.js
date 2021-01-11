@@ -195,7 +195,7 @@ class Chats extends Component {
                                                                     </div>
                                                                 :
                                                                     <div className={"chat-user-img " + chat.status +" align-self-center mr-3"}>
-                                                                        <img src={chat.profilePicture} className="rounded-circle avatar-xs" alt="chatvia" />
+                                                                        <img src={chat.profilePicture} className="rounded-circle avatar-xs" alt="Z-Chat" />
                                                                         {
                                                                             chat.status &&  <span className="user-status"></span>
                                                                         }

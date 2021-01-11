@@ -6,14 +6,8 @@ import {
 import avatar2 from "../../assets/images/users/avatar-2.jpg";
 
 const INIT_STATE = {
-	active_user :0,
-    users: [
-        { id : 0, name : "Patrick Hendricks", profilePicture : avatar2, status : "online", unRead : 0, roomType : "contact", isGroup: false, 
-            messages: [
-                { id: 6, message: "hi...Good Morning!", time: "09:05", userType: "sender", isImageMessage : false, isFileMessage : false },                
-            ] 
-        },
-    ],
+	active_user : null,
+    users: [],
     groups : [],
     contacts : [],
     loading: false,

@@ -44,10 +44,12 @@ function UserChat(props) {
     //demo conversation messages
     //userType must be required
 
-    const [ chatMessages, setchatMessages ] = useState([props.recentChatList[props.active_user].messages]); 
+    const [ chatMessages, setchatMessages ] = useState([]); 
 
     useEffect(() => {
-        setchatMessages(props.recentChatList[props.active_user].messages);
+        if(props.active_user !== null){
+            setchatMessages(props.recentChatList[props.active_user].messages);
+        }
         ref.current.recalculate();
         if (ref.current.el) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
@@ -229,7 +231,7 @@ function UserChat(props) {
                     <div className={ props.userSidebar ? "w-70" : "w-100" }>
 
                         {/* render user head */}
-                        <UserHead /> 
+                        {  props.recentChatList[props.active_user] ? <UserHead /> : null } 
 
                             <SimpleBar
                                 style={{ maxHeight: "100%" }}
@@ -237,7 +239,7 @@ function UserChat(props) {
                                 className="chat-conversation p-3 p-lg-4"
                                 id="messages">
                             <ul className="list-unstyled mb-0">
-                            
+                                
                                 
                                 {
                                     chatMessages.map((chat, key) => 
@@ -413,10 +415,8 @@ function UserChat(props) {
                                                                 }
                                                                 {
                                                                     !chat.isTyping && <p className="chat-time mb-0">
-                                                                        {chat.userType === "sender" ? status(chat.status) : null}
-                                                                         
+                                                                        {chat.userType === "sender" ? status(chat.status) : null}   
                                                                         {time(chat.time)}
-                                                                       
                                                                     </p>
                                                                 }
                                                             </div>
@@ -464,11 +464,15 @@ function UserChat(props) {
                                 </CardBody>
                             </ModalBody>
                         </Modal>
-    
-                        <ChatInput onaddMessage={addMessage} />
+                        {
+                            props.recentChatList[props.active_user] ? <ChatInput onaddMessage={addMessage} /> : null
+                        }
+                        
                     </div>
-
-                    <UserProfileSidebar activeUser={props.recentChatList[props.active_user]} />
+                    {
+                        props.recentChatList[props.active_user] ? <UserProfileSidebar activeUser={props.recentChatList[props.active_user]} /> : null
+                    }
+                    
 
                 </div>
             </div>

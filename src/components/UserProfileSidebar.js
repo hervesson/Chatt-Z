@@ -138,8 +138,8 @@ function UserProfileSidebar(props) {
                                             </div>
 
                                             <div className="mt-4">
-                                                <p className="text-muted mb-1">{t('Email')}</p>
-                                                <h5 className="font-size-14">{props.activeUser.email}</h5>
+                                                <p className="text-muted mb-1">{t('Phone number')}</p>
+                                                <h5 className="font-size-14">{props.activeUser.id}</h5>
                                             </div>
 
                                             <div className="mt-4">

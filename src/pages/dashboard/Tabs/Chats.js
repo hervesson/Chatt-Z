@@ -131,6 +131,8 @@ class Chats extends Component {
             return "Ontem"
         }else if(date2.diff(date1, 'days') < 7){
             return moment(time).locale('pt-br').format('dddd')
+        }else if(date2.diff(date1, 'days') > 7 || moment(time).format("YYYY") == moment().format('YYYY')){
+            return moment(time).format('DD/MM/YYYY')
         }else if(moment(time).format("YYYY") == "2020"){
             return moment(time).format('DD/MM/YYYY')
         }  

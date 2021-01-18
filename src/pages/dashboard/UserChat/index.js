@@ -14,6 +14,7 @@ import UserHead from "./UserHead";
 import ImageList from "./ImageList";
 import ChatInput from "./ChatInput"; 
 import FileList from "./FileList";
+import MessageReply from "./MessageReply";
 
 //actions
 import { openUserSidebar, 
@@ -44,7 +45,8 @@ function UserChat(props) {
     //demo conversation messages
     //userType must be required
 
-    const [ chatMessages, setchatMessages ] = useState([]); 
+    const [ chatMessages, setchatMessages ] = useState([]);
+    const [ replyMessage, setReplyMessage ] = useState([]) 
 
     useEffect(() => {
         if(props.active_user !== null){
@@ -221,6 +223,14 @@ function UserChat(props) {
             <span className="align-middle">{esseTime}</span>
         )
     }
+
+    const reply = (MessageId) => {
+        var vaq = []
+        chatMessages.forEach(doc => {if(doc.MessageId == MessageId){ vaq.push(doc) }})
+        return(
+            <MessageReply reply={vaq[0]}/>
+        )
+    } 
     
     return (
         <React.Fragment>
@@ -372,17 +382,22 @@ function UserChat(props) {
                                                         <div className="ctext-wrap">
                                                             <div className="ctext-wrap-content">
                                                                 {
-                                                                    chat.message &&
+                                                                    <div>
+                                                                        {chat.ReferenceMessageId ? reply(chat.ReferenceMessageId): null}
                                                                         <p className="mb-0">
                                                                             {chat.message}
+
                                                                         </p>
+                                                                    </div>   
                                                                 }
                                                                 {
                                                                     chat.audioMessage &&
                                                                     <div>
-                                                                        <p className="mb-0">
-                                                                           audio
-                                                                        </p>
+                                                                        {chat.ReferenceMessageId ? null : 
+                                                                            <p className="mb-0">
+                                                                                audio
+                                                                            </p>
+                                                                        }
                                                                         <audio src={chat.audioMessage} controls="controls" style={{backgroundColor: chat.status === "PLAYED" ? "#17202a" : null}} />
                                                                     </div>  
                                                                         
@@ -396,9 +411,11 @@ function UserChat(props) {
                                                                     chat.fileMessage &&
                                                                         //file input component
                                                                         <div>
-                                                                            <p className="mb-0">
-                                                                               file
-                                                                            </p>
+                                                                            {chat.ReferenceMessageId ? null : 
+                                                                                <p className="mb-0">
+                                                                                    file
+                                                                                </p>
+                                                                            }
                                                                             <FileList fileName={chat.fileMessage} fileSize={chat.size} filedownlad={chat.downloadURL} />
                                                                         </div>
                                                                 }
@@ -427,10 +444,11 @@ function UserChat(props) {
                                                                             <i className="ri-more-2-fill"></i>
                                                                         </DropdownToggle>
                                                                         <DropdownMenu>
+                                                                            <DropdownItem onClick={() => setReplyMessage(chat)}>{t('Answer')} <i className="ri-question-answer-line float-right text-muted"></i></DropdownItem>
                                                                             <DropdownItem>{t('Copy')} <i className="ri-file-copy-line float-right text-muted"></i></DropdownItem>
                                                                             <DropdownItem>{t('Save')} <i className="ri-save-line float-right text-muted"></i></DropdownItem>
-                                                                            <DropdownItem onClick={toggle}>Forward <i className="ri-chat-forward-line float-right text-muted"></i></DropdownItem>
-                                                                            <DropdownItem onClick={() => deleteMessage(chat.id) }>Delete <i className="ri-delete-bin-line float-right text-muted"></i></DropdownItem>
+                                                                            <DropdownItem onClick={toggle}>Encaminhar<i className="ri-chat-forward-line float-right text-muted"></i></DropdownItem>
+                                                                            <DropdownItem onClick={() => deleteMessage(chat.id) }>Deletar <i className="ri-delete-bin-line float-right text-muted"></i></DropdownItem>
                                                                         </DropdownMenu>
                                                                     </UncontrolledDropdown>
                                                             }

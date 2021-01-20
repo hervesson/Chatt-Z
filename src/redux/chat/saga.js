@@ -82,7 +82,7 @@ function* sendImage({ payload: { chatMessages, messageObj, message, numero }  })
     try {
 
         const response = yield call(fireBaseStorageBackend.mandarImagem, chatMessages, message, numero);
-        const imageSend = yield call(apiBackend.sendImagem, response, numero, messageObj.message );
+        const imageSend = yield call(apiBackend.sendImagem, response, numero, messageObj);
         yield call(fireBaseDatabaseBackend.mandarMessaImage, chatMessages, messageObj, message, numero, imageSend.messages[imageSend.size-1]);
 
     } catch (error) {
@@ -93,8 +93,8 @@ function* sendImage({ payload: { chatMessages, messageObj, message, numero }  })
 function* sendAudio({ payload: { chatMessages, messageObj, message, numero }  }) {
     try {
         const response = yield call(fireBaseStorageBackend.mandarAudio, chatMessages, message, numero);
-        const audioSend = yield call(apiBackend.sendAudio, response, numero);
-        yield call(fireBaseDatabaseBackend.mandarMessaAudio, chatMessages, message, numero, audioSend.messages[audioSend.size-1]);
+        const audioSend = yield call(apiBackend.sendAudio, response, numero, messageObj);
+        yield call(fireBaseDatabaseBackend.mandarMessaAudio, chatMessages, messageObj, message, numero, audioSend.messages[audioSend.size-1]);
     } catch (error) {
         yield put(requestFailed(error)); 
     }
@@ -103,8 +103,8 @@ function* sendAudio({ payload: { chatMessages, messageObj, message, numero }  })
 function* sendFile({ payload: { chatMessages, messageObj, message, numero }  }) {
     try {
         const response = yield call(fireBaseStorageBackend.mandarArquivo, chatMessages, messageObj, message, numero);
-        const arquivoSend = yield call(apiBackend.sendDocument, response, numero, messageObj.fileMessage);
-        yield call(fireBaseDatabaseBackend.mandarMessaArquivo, chatMessages, message, numero, arquivoSend.messages[arquivoSend.size-1]);
+        const arquivoSend = yield call(apiBackend.sendDocument, response, numero, messageObj);
+        yield call(fireBaseDatabaseBackend.mandarMessaArquivo, chatMessages, messageObj, message, numero, arquivoSend.messages[arquivoSend.size-1]);
     } catch (error) {
         yield put(requestFailed(error)); 
     }

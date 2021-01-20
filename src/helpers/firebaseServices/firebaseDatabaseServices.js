@@ -32,6 +32,7 @@ class firebaseDatabaseServices {
             userType : "sender",
             image : zutt,
             status: "send",
+            ReferenceMessageId: messageObj.ReferenceMessageId,
             isImageMessage : true,
             isFileMessage : false,
             isAudioMessage: false
@@ -48,7 +49,7 @@ class firebaseDatabaseServices {
         }       
     }
 
-    mandarMessaAudio(chatMessages, message, numero, response){
+    mandarMessaAudio(chatMessages, messageObj, message, numero, response){
 
         let ultima = chatMessages[chatMessages.length-1].time
         var lastTime = moment(ultima).format("DD/MM");
@@ -62,6 +63,7 @@ class firebaseDatabaseServices {
             userType : "sender",
             image : zutt,   
             status: "send",
+            ReferenceMessageId: messageObj.ReferenceMessageId,
             isImageMessage : false,
             isFileMessage : false,
             isAudioMessage: true
@@ -78,7 +80,7 @@ class firebaseDatabaseServices {
         }
     }
 
-    mandarMessaArquivo(chatMessages, message, numero, response){
+    mandarMessaArquivo(chatMessages, messageObj, message, numero, response){
 
         let ultima = chatMessages[chatMessages.length-1].time
         var lastTime = moment(ultima).format("DD/MM");
@@ -91,6 +93,7 @@ class firebaseDatabaseServices {
             size : message.size,
             time : new Date().getTime(),
             status: "send",
+            ReferenceMessageId: messageObj.ReferenceMessageId,
             userType : "sender", 
             image : zutt,
             isFileMessage : true,

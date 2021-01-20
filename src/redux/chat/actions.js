@@ -1,6 +1,6 @@
 import {
     CHAT_USER,ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS,REQUEST_FAILED,SET_IMAGE, SET_AUDIO,
-    SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS, DELETE_READ
+    SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS, DELETE_READ, SETMESSAGEREPLY, CLEARMESSAGEREPLY
 } from './constants';
 
 
@@ -69,6 +69,14 @@ export const contactsSucess = (contatos) => ({
 export const deleteRead = (numero) => ({
     type: DELETE_READ,
     payload: numero
+});
+
+export const setMessageReply = (reply) => ({
+    type: SETMESSAGEREPLY,
+});
+
+export const clearMessageReply = () => ({
+    type: CLEARMESSAGEREPLY,
 });
 
 

@@ -8,7 +8,7 @@ import 'moment/locale/pt-br';
 import SimpleBar from "simplebar-react";
 
 //actions
-import { setconversationNameInOpenChat, activeUser, deleteRead } from "../../../redux/actions"
+import { setconversationNameInOpenChat, activeUser, deleteRead, clearMessageReply } from "../../../redux/actions"
 
 //components
 //import OnlineUsers from "./OnlineUsers";
@@ -155,7 +155,7 @@ class Chats extends Component {
             <React.Fragment>
                         <div>
                             <div className="px-4 pt-4">
-                                <h4 className="mb-4">Chats</h4>
+                                <h4 className="mb-4">krbrindes</h4>
                                 <div className="search-box chat-search-box">
                                     <InputGroup size="lg" className="mb-3 bg-light rounded-lg">
                                         <InputGroupAddon addonType="prepend">
@@ -163,7 +163,7 @@ class Chats extends Component {
                                                 <i className="ri-search-line search-icon font-size-18"></i>
                                             </Button>
                                         </InputGroupAddon>
-                                        <Input type="text" value={this.state.searchChat} onChange={(e) => this.handleChange(e)} className="form-control bg-light" placeholder="Search messages or users" />
+                                        <Input type="text" value={this.state.searchChat} onChange={(e) => this.handleChange(e)} className="form-control bg-light" placeholder="Procure aqui suas conversas" />
                                     </InputGroup> 
                                 </div>
                                 {/* Search Box */}
@@ -181,7 +181,7 @@ class Chats extends Component {
                                         {
                                             this.state.recentChatList.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
-                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id)}}>
+                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id); this.props.clearMessageReply()}}>
                                                         <Media>
                                                             {
                                                                 chat.profilePicture === "Null" ?
@@ -259,4 +259,4 @@ const mapStateToProps = (state) => {
     return { active_user };
 };
 
-export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser, deleteRead })(Chats);
+export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser, deleteRead, clearMessageReply })(Chats);

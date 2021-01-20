@@ -1,6 +1,5 @@
 import {
-    CHAT_USER, ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS, REQUEST_FAILED, SET_IMAGE, SET_AUDIO, SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS, DELETE_READ
-} from './constants';
+    CHAT_USER, ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS, REQUEST_FAILED, SET_IMAGE, SET_AUDIO, SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS, DELETE_READ, SETMESSAGEREPLY, CLEARMESSAGEREPLY} from './constants';
 
 //Import Images
 import avatar2 from "../../assets/images/users/avatar-2.jpg";
@@ -11,7 +10,8 @@ const INIT_STATE = {
     groups : [],
     contacts : [],
     loading: false,
-    error: null
+    error: null,
+    messageReply: false
 };
 
 const Chat = (state = INIT_STATE, action) => {
@@ -71,7 +71,14 @@ const Chat = (state = INIT_STATE, action) => {
             return { ...state, contacts: action.payload, loading: false };
 
         case DELETE_READ:
-            return { ...state };            
+            return { ...state };
+
+        case SETMESSAGEREPLY:
+            return { ...state, messageReply: true }; 
+
+        case CLEARMESSAGEREPLY:
+            return { ...state, messageReply: false };      
+                      
             
     default: return { ...state };
     }

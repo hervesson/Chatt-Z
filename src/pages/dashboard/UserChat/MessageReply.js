@@ -7,7 +7,7 @@ const MessageReply = (props) => {
 		<div>
 		{
 			<div className="bg-primary mb-1 rounded">
-		    	<div className="d-flex justify-content-start align-items-center">
+		    	<div className="d-flex justify-content-between align-items-center">
 			    	<div className="pl-1 pr-1">
 			    		<p style={{fontSize:10}}> {props.reply.userType == "sender" ? "Voce" : "Cliente"} <br/> 
 			    			{
@@ -20,7 +20,7 @@ const MessageReply = (props) => {
 							}
 							{
 								props.reply.isFileMessage && 
-								<span className="fs-6">Arquivo</span>
+								<span style={{fontSize:15}}>{props.reply.fileMessage}</span>
 							}
 			    		</p> 
 					</div>	

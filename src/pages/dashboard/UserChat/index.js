@@ -23,7 +23,8 @@ import { openUserSidebar,
     setImage, 
     setAudio, 
     setFile, 
-    requestContacts
+    requestContacts,
+    setMessageReply
 } from "../../../redux/actions";
 
 //Import Images
@@ -59,17 +60,22 @@ function UserChat(props) {
     },[props.active_user, props.recentChatList]);
 
     useEffect(() => {
-       props.requestChat();
-       //props.requestContacts()
+       props.requestChat();  props.requestContacts()
     },[]); 
+
+    useEffect(() => {
+        if (props.messageReply == false) {
+            setReplyMessage("");
+        } 
+    },[props.messageReply])
 
     const toggle = () => setModal(!modal);
 
     const addMessage = (message, type, legenda="") => {
         var messageObj = null;
 
-        let ultima = chatMessages[chatMessages.length-1].time
 
+        let ultima = chatMessages[chatMessages.length-1].time
         var lastTime = moment(ultima).format("DD/MM");
         var currentDate = moment(new Date().getTime()).format("DD/MM")
 
@@ -80,6 +86,7 @@ function UserChat(props) {
                     message : message,
                     time : new Date().getTime(),
                     status: false,
+                    ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
                     userType : "sender",
                     image : zutt,
                     isFileMessage : false,
@@ -93,6 +100,7 @@ function UserChat(props) {
                     audioMessage : URL.createObjectURL(message),
                     time : new Date().getTime(),
                     status: false,
+                    ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
                     userType : "sender",
                     image : zutt,
                     isFileMessage : false,
@@ -108,6 +116,7 @@ function UserChat(props) {
                     size : message.size,
                     time : new Date().getTime(),
                     status: false,
+                    ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
                     userType : "sender", 
                     image : zutt,
                     isFileMessage : true,
@@ -126,6 +135,7 @@ function UserChat(props) {
                     message : legenda,
                     time : new Date().getTime(),
                     status: false,
+                    ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
                     userType : "sender",
                     image : zutt,
                     isImageMessage : true,
@@ -138,6 +148,8 @@ function UserChat(props) {
         }
      
         setchatMessages([...chatMessages, messageObj]);
+
+        scrolltoBottom();
 
         let copyallUsers = props.recentChatList;
         copyallUsers[props.active_user].messages = [...chatMessages, messageObj];
@@ -153,31 +165,23 @@ function UserChat(props) {
         else {
              newMessage = [...chatMessages]
         }
-
         
         switch (type) {
             case "textMessage":
-                props.setFullUser(messageObj, newMessage, numero);
+                props.setFullUser(messageObj, newMessage, numero); setReplyMessage("")
                 break;
-
             case "audioMessage":
-                props.setAudio(chatMessages, messageObj, message, numero);
+                props.setAudio(chatMessages, messageObj, message, numero); setReplyMessage("")
                 break;    
-
             case "fileMessage":
-                props.setFile(chatMessages, messageObj, message, numero);
+                props.setFile(chatMessages, messageObj, message, numero); setReplyMessage("")
                 break;
-
             case "imageMessage":
-                props.setImage(chatMessages, messageObj, message, numero);
+                props.setImage(chatMessages, messageObj, message, numero); setReplyMessage("")
                 break;
-        
             default:
                 break;
         }
-
-        
-        scrolltoBottom();
     }
 
     function scrolltoBottom(){  
@@ -201,19 +205,14 @@ function UserChat(props) {
         switch (status) {
             case "RECEIVED":
                 return(<i className={ "ri-check-double-fill" }></i>)
-                
             case "READ":
                 return(<i className={ "ri-check-double-fill" } style={{color: 'blue'}}></i>)
-
             case "PLAYED":
                 return(<i className={ "ri-check-double-fill" } style={{color: 'blue'}}></i>)
-
             case "send":
                 return(<i className={ "ri-check-line" }></i>)
-        
             default:
-            return(<i className={ "ri-time-line align-middle" }></i>)
-            
+            return(<i className={ "ri-time-line align-middle" }></i>) 
         }
     }
 
@@ -444,7 +443,7 @@ function UserChat(props) {
                                                                             <i className="ri-more-2-fill"></i>
                                                                         </DropdownToggle>
                                                                         <DropdownMenu>
-                                                                            <DropdownItem onClick={() => setReplyMessage(chat)}>{t('Answer')} <i className="ri-question-answer-line float-right text-muted"></i></DropdownItem>
+                                                                            <DropdownItem onClick={() => {setReplyMessage(chat); props.setMessageReply()}}>{t('Answer')} <i className="ri-question-answer-line float-right text-muted"></i></DropdownItem>
                                                                             <DropdownItem>{t('Copy')} <i className="ri-file-copy-line float-right text-muted"></i></DropdownItem>
                                                                             <DropdownItem>{t('Save')} <i className="ri-save-line float-right text-muted"></i></DropdownItem>
                                                                             <DropdownItem onClick={toggle}>Encaminhar<i className="ri-chat-forward-line float-right text-muted"></i></DropdownItem>
@@ -470,20 +469,20 @@ function UserChat(props) {
                                 </SimpleBar>
 
                         <Modal backdrop="static" isOpen={modal} centered toggle={toggle}>
-                            <ModalHeader toggle={toggle}>Forward to...</ModalHeader>
+                            <ModalHeader toggle={toggle}>Encaminhar para...</ModalHeader>
                             <ModalBody>
                                 <CardBody className="p-2">
                                     <SimpleBar style={{maxHeight: "200px"}}>
                                         <SelectContact handleCheck={() => {}} />
                                     </SimpleBar>
                                     <ModalFooter className="border-0">
-                                        <Button color="primary">Forward</Button>
+                                        <Button color="primary">Encaminhar</Button>
                                     </ModalFooter>
                                 </CardBody>
                             </ModalBody>
                         </Modal>
                         {
-                            props.recentChatList[props.active_user] ? <ChatInput onaddMessage={addMessage} /> : null
+                            props.recentChatList[props.active_user] ? <ChatInput onaddMessage={addMessage} messageReply={replyMessage} onEventPropsClick={() => setReplyMessage("")} /> : null
                         }
                         
                     </div>
@@ -500,8 +499,9 @@ function UserChat(props) {
 
 const mapStateToProps = (state) => {
     const { active_user } = state.Chat;
+    const { messageReply } = state.Chat;
     const { userSidebar } = state.Layout;
-    return { active_user,userSidebar };
+    return { active_user,userSidebar, messageReply };
 };
 
 export default withRouter(connect(mapStateToProps, 
@@ -511,6 +511,7 @@ export default withRouter(connect(mapStateToProps,
     setImage, 
     setAudio, 
     setFile, 
-    requestContacts})
+    requestContacts,
+    setMessageReply})
 (UserChat));
 

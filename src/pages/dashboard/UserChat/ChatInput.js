@@ -3,6 +3,7 @@ import { Button, Input, Row, Col, UncontrolledTooltip, ButtonDropdown, DropdownT
 import MicRecorder from 'mic-recorder-to-mp3';
 import { Picker } from 'emoji-mart'
 import 'emoji-mart/css/emoji-mart.css'
+import MessageReply from "./MessageReply"
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 }); 
 
@@ -98,9 +99,7 @@ function ChatInput(props) {
         }
     }
 
-    const {
-        className
-    } = props;
+    const { className } = props;
    
     function messageIdGenerator() {
         if(fileImage !== ""){
@@ -112,11 +111,20 @@ function ChatInput(props) {
         }
     }
 
-
     return (
         <React.Fragment>
             <div className="p-3 p-lg-4 border-top mb-0">
                             <Form onSubmit={(e) => onaddMessage(e, textMessage)}>
+                                {
+                                    props.messageReply.length !== 0 ? <div className="d-flex bd-highlight align-items-center">
+                                        <div className="pr-2 w-100 bd-highlight">
+                                            <MessageReply reply={props.messageReply}/>
+                                        </div>
+                                        <div className="flex-shrink-1 bd-highlight">    
+                                            <i className="ri-close-circle-line" onClick={() => props.onEventPropsClick()}></i>
+                                        </div>
+                                    </div> : null
+                                }
                                 <Row noGutters>
                                     <Col>
                                         <div>

@@ -226,9 +226,11 @@ function UserChat(props) {
     const reply = (MessageId) => {
         var vaq = []
         chatMessages.forEach(doc => {if(doc.MessageId == MessageId){ vaq.push(doc) }})
-        return(
-            <MessageReply reply={vaq[0]}/>
-        )
+        if(vaq.length !==0 ){
+            return(
+                <MessageReply reply={vaq[0]}/>
+            )
+        }
     } 
     
     return (

@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Card, Media, Button, UncontrolledDropdown, Input, Label } from "reactstrap";
+import React, { useState, useEffect } from 'react';
+import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Card, Media, Button, UncontrolledDropdown, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Link } from "react-router-dom";
 
 import SimpleBar from "simplebar-react";
 
 //Import components
 import CustomCollapse from "../../../components/CustomCollapse";
+
+import { firebaseStorageServices } from  "../../../helpers/firebaseServices/firebaseStorageServices";
+
+import { auth } from "../../../helpers/firebase";
 
 //Import Images
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
@@ -19,9 +23,26 @@ function Settings(props) {
     const [isOpen2, setIsOpen2] = useState(false);
     const [isOpen3, setIsOpen3] = useState(false);
     const [isOpen4, setIsOpen4] = useState(false);
+    const [isOpen5, setIsOpen5] = useState(false);
+    const [user, setStateUser] = useState([])
+    const [usuario, setStateUsuario] = useState(false)
+    const [novoUsuario, setNovoUsuario] = useState("");
+    const [fileImage, setfileImage] = useState("")
 
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+
+    const fireBaseStorageBackend = new firebaseStorageServices();
+
+    useEffect(() => {
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                setStateUser(user) 
+            } 
+        });
+    },[])
+
+    const toggle1 = () => {setfileImage("")}
 
     const toggleCollapse1 = () => {
         setIsOpen1(!isOpen1);
@@ -53,6 +74,37 @@ function Settings(props) {
 
     const toggle = () => setDropdownOpen(!dropdownOpen);
 
+    const handleChange = e => {
+        setNovoUsuario(e.target.value)
+    }
+
+    const handleImageChange = e => {
+        if(e.target.files.length !==0 )
+        setfileImage(e.target.files[0])
+        setIsOpen5(true)
+    }
+
+    const saveUsuario = () => {
+        var user = auth.currentUser;
+        user.updateProfile({
+          displayName: novoUsuario ? novoUsuario : props.user.displayName
+        }).then(function() {
+          setStateUsuario(false)
+        }).catch(function(error) {
+          console.log(error)
+        });
+    }
+
+    function messageIdGenerator() {
+        if(fileImage !== ""){
+            const queiraBem =  URL.createObjectURL( fileImage )
+            return queiraBem
+        }else{
+            const nega = user.photoURL
+            return nega
+        }
+    }
+
     return (
         <React.Fragment>
             <div>
@@ -62,14 +114,17 @@ function Settings(props) {
 
                             <div className="text-center border-bottom p-4">
                                 <div className="mb-4 profile-user">
-                                    <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail" alt="chatvia" />
+                                    <img src={messageIdGenerator()} className="rounded-circle avatar-lg img-thumbnail" alt="chatvia" />
                                     <Button type="button" color="light" className="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                        <i className="ri-pencil-fill"></i>
+                                        <Label>
+                                            <i className="ri-pencil-fill"></i> 
+                                            <Input onChange={(e) => handleImageChange(e)} accept="image/*" type="file" className="invisible" />
+                                        </Label> 
                                     </Button>   
                                     
                                 </div>
 
-                                <h5 className="font-size-16 mb-1 text-truncate">{t('Patricia Smith')}</h5>
+                                <h5 className="font-size-16 mb-1 text-truncate">{user.displayName}</h5>
                                 <Dropdown isOpen={dropdownOpen} toggle={toggle} className="d-inline-block mb-1">
                                     <DropdownToggle tag="a" className="text-muted pb-1 d-block" >
                                         {t('Available')} <i className="mdi mdi-chevron-down"></i>
@@ -90,22 +145,35 @@ function Settings(props) {
                                     <Card className="shadow-none border mb-2">
                                         <CustomCollapse
                                             title = "Personal Info"
-                                            isOpen={isOpen1}
+                                            isOpen={isOpen1} 
                                             toggleCollapse={toggleCollapse1}
                                         >
 
                                                 <div className="float-right">
-                                                    <Button color="light" size="sm" type="button" ><i className="ri-edit-fill mr-1 align-middle"></i> {t('Edit')}</Button>
+                                                    <Button color="light" size="sm" type="button" onClick={() => usuario ? saveUsuario() : setStateUsuario(true) }>
+                                                        {
+                                                            usuario ? 
+                                                                <div><i className="ri-save-line mr-1 align-middle"></i> {t('Save')}</div>
+                                                            :    
+                                                                <div><i className="ri-edit-fill mr-1 align-middle"></i> {t('Edit')}</div>
+                                                        }
+                                                    </Button>
                                                 </div>
 
-                                                <div>
-                                                    <p className="text-muted mb-1">{t('Name')}</p>
-                                                    <h5 className="font-size-14">{t('Patricia Smith')}</h5>
-                                                </div>
+                                                {   usuario ? 
+                                                    <div>
+                                                        <Input type="text" value={novoUsuario} style={{width:"auto"}}  onChange={handleChange}  placeholder="Usuario" />
+                                                    </div>
+                                                    : 
+                                                    <div>
+                                                        <p className="text-muted mb-1">{t('Name')}</p>
+                                                        <h5 className="font-size-14">{user.displayName}</h5>
+                                                    </div>
+                                                }
 
                                                 <div className="mt-4">
                                                     <p className="text-muted mb-1">{t('Email')}</p>
-                                                    <h5 className="font-size-14">{t('adc@123.com')}</h5>
+                                                    <h5 className="font-size-14">{user.email}</h5>
                                                 </div>
 
                                                 <div className="mt-4">
@@ -266,6 +334,16 @@ function Settings(props) {
                                 {/* end profile-setting-accordion */}
                             </SimpleBar>
                             {/* End User profile description */}
+                            <Modal isOpen={isOpen5 ? true : false} toggle={toggle1}> 
+                                <ModalHeader toggle={toggle1}>Imagem selecionada</ModalHeader>
+                                <ModalBody>
+                                    <img src={messageIdGenerator()} width="350" alt="chat" className="rounded border" />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="secondary" onClick={toggle1}>Cancelar</Button>
+                                    <Button color="primary" onClick={(e) => {fireBaseStorageBackend.imageProfile(fileImage, user.email) ; setIsOpen5(false)}}>Enviar</Button>{' '}
+                                </ModalFooter>
+                            </Modal>
                         </div>
         </React.Fragment>
     );

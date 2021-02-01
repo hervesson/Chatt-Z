@@ -6,7 +6,8 @@ import {
     REGISTER_USER_SUCCESS,
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
-    API_FAILED
+    API_FAILED, 
+    UPDATE_USER
 } from './constants';
 
 
@@ -33,6 +34,11 @@ export const registerUserSuccess = (user) => ({
 export const logoutUser = (history) => ({
     type: LOGOUT_USER,
     payload: { history }
+});
+
+export const updateUser = (name, image) => ({
+    type: UPDATE_USER,
+    payload: { name, image }
 });
 
 export const forgetPassword = (email) => ({

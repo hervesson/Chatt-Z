@@ -24,12 +24,14 @@ import { openUserSidebar,
     setAudio, 
     setFile, 
     requestContacts,
-    setMessageReply
+    setMessageReply, 
+    updateUser
 } from "../../../redux/actions";
 
 //Import Images
 
 import zutt from "../../../assets/images/users/zutt.png";
+import profile from "../../../assets/images/users/profile.png";
 
 //i18n
 import { useTranslation } from 'react-i18next';
@@ -39,6 +41,9 @@ function UserChat(props) {
     const ref = useRef();  
 
     const [modal, setModal] = useState(false);
+    const [modal1, setModal1] = useState(false);
+    const [fileImage, setfileImage] = useState("")
+    const [textMessage, settextMessage] = useState("");
 
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
@@ -47,21 +52,29 @@ function UserChat(props) {
     //userType must be required
 
     const [ chatMessages, setchatMessages ] = useState([]);
-    const [ replyMessage, setReplyMessage ] = useState([]) 
-
+    const [ replyMessage, setReplyMessage ] = useState([]);
+    
     useEffect(() => {
         if(props.active_user !== null){
-            setchatMessages(props.recentChatList[props.active_user].messages);
+            retriveMessages()
         }
         ref.current.recalculate();
         if (ref.current.el) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
         }
-    },[props.active_user, props.recentChatList]);
+    },[props.active_user]);
 
     useEffect(() => {
        props.requestChat();  props.requestContacts()
     },[]); 
+
+    useEffect(() => {
+        auth.onAuthStateChanged(function(user) {
+            if (user.displayName == null) {
+                toggle1()
+            } else{setModal1(false)}
+        });
+    }, [props.user])
 
     useEffect(() => {
         if (props.messageReply == false) {
@@ -70,10 +83,20 @@ function UserChat(props) {
     },[props.messageReply])
 
     const toggle = () => setModal(!modal);
+    const toggle1 = () => setModal1(!modal1);
+
+    const  retriveMessages = () => {
+        database.ref("/server/conversas/" + props.active_user.id + "/messages").on("value", snapshot => {
+            let conversas = [];
+            snapshot.forEach(ids => {
+                conversas.push(ids.val()); 
+            })
+            setchatMessages(conversas); 
+        });
+    }
 
     const addMessage = (message, type, legenda="") => {
         var messageObj = null;
-
 
         let ultima = chatMessages[chatMessages.length-1].time
         var lastTime = moment(ultima).format("DD/MM");
@@ -212,7 +235,7 @@ function UserChat(props) {
             case "send":
                 return(<i className={ "ri-check-line" }></i>)
             default:
-            return(<i className={ "ri-time-line align-middle" }></i>) 
+                return(<i className={ "ri-time-line align-middle" }></i>) 
         }
     }
 
@@ -232,6 +255,30 @@ function UserChat(props) {
             )
         }
     } 
+
+    function messageIdGenerator() {
+        const queiraBem =  URL.createObjectURL( fileImage )
+        return queiraBem
+    }
+
+    const handleImageChange = e => {
+        if(e.target.files.length !==0 )
+        setfileImage(e.target.files[0])
+    }
+
+    const handleChange = e => {
+        settextMessage(e.target.value)
+    }
+
+    const verificador = () => {
+        if (fileImage == ""){
+            alert("imagem vazia")
+        }else if (textMessage == "" ){
+            alert("sem usuário")
+        }else if(fileImage && textMessage !== ""){
+            props.updateUser(textMessage, fileImage)
+        }
+    }
     
     return (
         <React.Fragment>
@@ -483,16 +530,33 @@ function UserChat(props) {
                                 </CardBody>
                             </ModalBody>
                         </Modal>
+                        <Modal backdrop="static" isOpen={modal1} centered toggle={toggle1}>
+                            <ModalHeader>Insira sua foto e nome de usuário</ModalHeader>
+                            <ModalBody>
+                                <div>
+                                    {
+                                        fileImage ? 
+                                            <img src={messageIdGenerator()} width="300" alt="chat" className="rounded border" />
+                                        :
+                                            <img src={profile} width="350" alt="chat" className="rounded border" />  
+                                    }     
+                                    <Input onChange={(e) => handleImageChange(e)} accept="image/*" type="file"  />
+                                    <Input type="text" value={textMessage} onChange={handleChange} className="form-control form-control-lg bg-light border-light" placeholder="Digite Seu nome de usuário" />
+
+                                </div>    
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="primary" onClick={(e) => {verificador()}}>Enviar</Button>{' '}
+                            </ModalFooter>
+                        </Modal>
                         {
-                            props.recentChatList[props.active_user] ? <ChatInput onaddMessage={addMessage} messageReply={replyMessage} onEventPropsClick={() => setReplyMessage("")} /> : null
+                            props.active_user ? <ChatInput onaddMessage={addMessage} messageReply={replyMessage} onEventPropsClick={() => setReplyMessage("")} /> : null
                         }
                         
                     </div>
                     {
-                        props.recentChatList[props.active_user] ? <UserProfileSidebar activeUser={props.recentChatList[props.active_user]} /> : null
+                        props.active_user ? <UserProfileSidebar activeUser={props.active_user} /> : null
                     }
-                    
-
                 </div>
             </div>
         </React.Fragment>
@@ -500,10 +564,10 @@ function UserChat(props) {
 }
 
 const mapStateToProps = (state) => {
-    const { active_user } = state.Chat;
-    const { messageReply } = state.Chat;
+    const { active_user, messageReply, messages } = state.Chat;
     const { userSidebar } = state.Layout;
-    return { active_user,userSidebar, messageReply };
+    const { user } = state.Auth;
+    return { active_user, userSidebar, messageReply, messages, user};
 };
 
 export default withRouter(connect(mapStateToProps, 
@@ -514,6 +578,7 @@ export default withRouter(connect(mapStateToProps,
     setAudio, 
     setFile, 
     requestContacts,
-    setMessageReply})
+    setMessageReply, 
+    updateUser})
 (UserChat));
 

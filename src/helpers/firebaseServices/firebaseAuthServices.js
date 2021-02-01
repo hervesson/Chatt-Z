@@ -15,11 +15,30 @@ class firebaseAuthServices {
     /**
      * Registers the user with given details
      */
-    registerUser = (email, password) => {
+    registerUser = (email, password, username) => {
         return new Promise((resolve, reject) => {
             auth.createUserWithEmailAndPassword(email, password).then((user) => {
-                resolve(auth.currentUser);
+                const prov = auth.currentUser
+                prov.updateProfile({
+                    displayName: username
+                }).then(function() {
+                    resolve(auth.currentUser);
+                })  
             }, (error) => {
+                reject(this._handleError(error));
+            });
+        });
+    }
+
+
+    updateName = (name) => {
+        return new Promise((resolve, reject) => {
+            const prov = auth.currentUser
+            prov.updateProfile({
+                displayName: name
+            }).then(function() {
+                resolve(auth.currentUser);
+            }).catch(function(error) {
                 reject(this._handleError(error));
             });
         });

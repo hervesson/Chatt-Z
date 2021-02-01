@@ -1,4 +1,4 @@
-import {  storage  } from "../firebase";
+import {  storage, auth  } from "../firebase";
 
 
 class firebaseStorageServices {
@@ -52,6 +52,24 @@ class firebaseStorageServices {
                 }, 
             );
         }); 
+    }
+
+    imageProfile = ( image ) => {
+        const prov = auth.currentUser
+        const uploadTask = storage.ref("ZuttChat/atendentes/"+ prov.email + "/" + prov.email).put(image);
+            uploadTask.on(
+            "state_changed", snapshot => {
+                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                console.log(progress)
+            }, error => { console.log(error)},
+            () => {
+                storage.ref("ZuttChat/atendentes/"+ prov.email + "/" + prov.email).getDownloadURL().then(url => {
+                    prov.updateProfile({
+                        photoURL: url
+                    })
+                });
+            }, 
+        );
     }
 }
 

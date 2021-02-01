@@ -2,13 +2,15 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import { APIClient } from '../../helpers/apiClient';
 import { firebaseAuthServices } from "../../helpers/firebaseServices/firebaseAuthServices";
+import { firebaseStorageServices } from "../../helpers/firebaseServices/firebaseStorageServices";
 
 
 import {
     LOGIN_USER,
     LOGOUT_USER,
     REGISTER_USER,
-    FORGET_PASSWORD
+    FORGET_PASSWORD,
+    UPDATE_USER
 } from './constants';
 
 
@@ -22,8 +24,7 @@ import {
 
 //Initilize firebase
 const fireBaseBackend = new  firebaseAuthServices();
-
-
+const fireBaseStorageBackend = new firebaseStorageServices();
 /**
  * Sets the session
  * @param {*} user 
@@ -69,14 +70,21 @@ function* register({ payload: { user } }) {
     try {
         const email = user.email;
         const password = user.password;
-        if(process.env.REACT_APP_DEFAULTAUTH === "firebase"){
-            const response = yield call(fireBaseBackend.registerUser, email, password);
+        const username = user.username
+
+            const response = yield call(fireBaseBackend.registerUser, email, password, username);
             yield put(registerUserSuccess(response));
-        } else {
-            const response = yield call(create, '/register', user);
-            yield put(registerUserSuccess(response));
-        }
-        
+    
+    } catch (error) {
+        yield put(apiError(error));
+    }
+}
+
+function* updateUser({ payload: {name, image} }) {
+    try {
+        const user = yield call(fireBaseBackend.updateName, name );
+        const response = yield call(fireBaseStorageBackend.imageProfile, image );
+        yield put(registerUserSuccess(user));
     } catch (error) {
         yield put(apiError(error));
     }
@@ -118,6 +126,10 @@ export function* watchRegisterUser() {
     yield takeEvery(REGISTER_USER, register);
 }
 
+export function* watchUpdateUser() {
+    yield takeEvery(UPDATE_USER, updateUser);
+}
+
 export function* watchForgetPassword() {
     yield takeEvery(FORGET_PASSWORD, forgetPassword);
 }
@@ -126,6 +138,7 @@ function* authSaga() {
     yield all([
         fork(watchLoginUser),
         fork(watchLogoutUser),
+        fork(watchUpdateUser),
         fork(watchRegisterUser),
         fork(watchForgetPassword),
     ]);

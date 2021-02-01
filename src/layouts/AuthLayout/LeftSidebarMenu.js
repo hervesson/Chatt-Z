@@ -126,7 +126,7 @@ function LeftSidebarMenu(props) {
                                 <DropdownItem onClick={() => { toggleTab('profile'); }}>Profile <i className="ri-profile-line float-right text-muted"></i></DropdownItem>
                                 <DropdownItem onClick={() => { toggleTab('settings'); }}>Setting <i className="ri-settings-3-line float-right text-muted"></i></DropdownItem>
                                 <DropdownItem divider />
-                                <DropdownItem href="/logout">Log out <i className="ri-logout-circle-r-line float-right text-muted"></i></DropdownItem>
+                                <DropdownItem href="/logout">Log out<i className="ri-logout-circle-r-line float-right text-muted"></i></DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </Nav>
@@ -173,7 +173,7 @@ function LeftSidebarMenu(props) {
                         </NavItem>*/}
                         <Dropdown nav isOpen={dropdownOpen} className="btn-group dropup profile-user-dropdown" toggle={toggle}>
                             <DropdownToggle nav>
-                            <img src={avatar1} alt="" className="profile-user rounded-circle" />
+                            <img src={props.user.photoURL ? props.user.photoURL : null} alt="" className="profile-user rounded-circle" />
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem onClick={() => { toggleTab('profile'); }}>Profile <i className="ri-profile-line float-right text-muted"></i></DropdownItem>
@@ -191,9 +191,8 @@ function LeftSidebarMenu(props) {
 }
 
 const mapStatetoProps = state => {
-    return {
-      ...state.Layout
-    };
+    const { user } = state.Auth;
+    return { ...state.Layout, user };
 };
 
 export default connect(mapStatetoProps, {

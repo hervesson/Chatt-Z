@@ -144,11 +144,6 @@ const Login = (props) => {
                                 </div>
                             </CardBody>
                         </Card>
-
-                        <div className="mt-5 text-center">
-                            <p>{t("Don't have an account")} ? <Link to="register" className="font-weight-medium text-primary"> {t('Signup now')} </Link> </p>
-                            <p>© {t('2020 ZuttChat')} {t('by Themesbrand')}</p>
-                        </div>
                     </Col>
                 </Row>
             </Container>

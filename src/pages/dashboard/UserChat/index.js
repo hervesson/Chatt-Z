@@ -1,11 +1,13 @@
 import React, { useState,useEffect, useRef } from 'react';
-import { DropdownMenu, DropdownItem, DropdownToggle, UncontrolledDropdown, Modal, ModalHeader, ModalBody, CardBody, Button, ModalFooter } from "reactstrap";
+import { DropdownMenu, DropdownItem, DropdownToggle, UncontrolledDropdown, Modal, ModalHeader, ModalBody, CardBody, Button, ModalFooter, Input } from "reactstrap";
 import { connect } from "react-redux";
 import moment from 'moment'; 
 
 import SimpleBar from "simplebar-react";
 
 import { withRouter } from 'react-router-dom';
+
+import { database, auth } from "../../../helpers/firebase";
 
 //Import Components
 import UserProfileSidebar from "../../../components/UserProfileSidebar";
@@ -25,7 +27,7 @@ import { openUserSidebar,
     setFile, 
     requestContacts,
     setMessageReply, 
-    updateUser
+    updateUser, setUser
 } from "../../../redux/actions";
 
 //Import Images

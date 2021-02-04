@@ -7,7 +7,8 @@ import {
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
     API_FAILED, 
-    UPDATE_USER
+    UPDATE_USER, 
+    SET_USER
 } from './constants';
 
 
@@ -36,9 +37,14 @@ export const logoutUser = (history) => ({
     payload: { history }
 });
 
-export const updateUser = (name, image) => ({
+export const updateUser = (image) => ({
     type: UPDATE_USER,
-    payload: { name, image }
+    payload: { image }
+});
+
+export const setUser = (user) => ({
+    type: SET_USER,
+    payload: { user }
 });
 
 export const forgetPassword = (email) => ({

@@ -30,20 +30,6 @@ class firebaseAuthServices {
         });
     }
 
-
-    updateName = (name) => {
-        return new Promise((resolve, reject) => {
-            const prov = auth.currentUser
-            prov.updateProfile({
-                displayName: name
-            }).then(function() {
-                resolve(auth.currentUser);
-            }).catch(function(error) {
-                reject(this._handleError(error));
-            });
-        });
-    }
-
     /**
      * Login user with given details
      */

@@ -13,4 +13,9 @@ export const API_FAILED = "AUTH_API_FAILED";
 
 export const UPDATE_USER = "UPDATE_USER";
 
+export const SET_USER = "SET_USER";
+
+
+
+
 

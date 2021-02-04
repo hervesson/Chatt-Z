@@ -80,11 +80,9 @@ function* register({ payload: { user } }) {
     }
 }
 
-function* updateUser({ payload: {name, image} }) {
+function* updateUser({ payload: { image} }) {
     try {
-        const user = yield call(fireBaseBackend.updateName, name );
-        const response = yield call(fireBaseStorageBackend.imageProfile, image );
-        yield put(registerUserSuccess(user));
+        yield call(fireBaseStorageBackend.imageProfile, image );
     } catch (error) {
         yield put(apiError(error));
     }

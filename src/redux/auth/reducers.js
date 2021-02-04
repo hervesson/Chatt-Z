@@ -7,18 +7,20 @@ import {
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
     API_FAILED, 
-    UPDATE_USER
+    UPDATE_USER, 
+    SET_USER
 } from './constants';
 
 import { getLoggedInUser } from '../../helpers/authUtils';
 
 const INIT_STATE = {
-    user: getLoggedInUser(),
+    user: [],
     loading: false
 };
 
 
 const Auth = (state = INIT_STATE, action) => {
+    console.log(action)
     switch (action.type) {
         case LOGIN_USER:
             return { ...state, loading: true };
@@ -31,7 +33,10 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, user: action.payload, loading: false, error: null };
 
         case UPDATE_USER:
-            return { ...state, loading: true };   
+            return { ...state, loading: true };
+
+        case SET_USER:
+            return { ...state, user: action.payload.user };       
 
         case LOGOUT_USER:
             return { ...state, user: null };

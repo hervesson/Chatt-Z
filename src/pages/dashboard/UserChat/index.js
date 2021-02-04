@@ -112,8 +112,8 @@ function UserChat(props) {
                     time : new Date().getTime(),
                     status: false,
                     ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
-                    userType : "sender",
-                    image : zutt,
+                    userType : props.user.displayName,
+                    image : props.user.photoURL,
                     isFileMessage : false,
                     isImageMessage : false,
                     isAudioMessage : false
@@ -126,8 +126,8 @@ function UserChat(props) {
                     time : new Date().getTime(),
                     status: false,
                     ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
-                    userType : "sender",
-                    image : zutt,
+                    userType : props.user.displayName,
+                    image : props.user.photoURL,
                     isFileMessage : false,
                     isImageMessage : false,
                     isAudioMessage : true
@@ -142,8 +142,8 @@ function UserChat(props) {
                     time : new Date().getTime(),
                     status: false,
                     ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
-                    userType : "sender", 
-                    image : zutt,
+                    userType : props.user.displayName,
+                    image : props.user.photoURL,
                     isFileMessage : true,
                     isImageMessage : false,
                     isAudioMessage : false
@@ -161,8 +161,8 @@ function UserChat(props) {
                     time : new Date().getTime(),
                     status: false,
                     ReferenceMessageId: replyMessage.length !== 0 ? replyMessage.MessageId : null,
-                    userType : "sender",
-                    image : zutt,
+                    userType : props.user.displayName,
+                    image : props.user.photoURL,
                     isImageMessage : true,
                     isFileMessage : false,
                     isAudioMessage : false
@@ -174,21 +174,17 @@ function UserChat(props) {
      
         setchatMessages([...chatMessages, messageObj]);
 
-        scrolltoBottom();
+        scrolltoBottom();        
 
-        let copyallUsers = props.recentChatList;
-        copyallUsers[props.active_user].messages = [...chatMessages, messageObj];
-        copyallUsers[props.active_user].isTyping = false;
-        let numero = copyallUsers[props.active_user].id
-
+        let numero = props.active_user.id
         let obj = {isToday: true, data: currentDate}
        
         let newMessage = []
         if (lastTime !== currentDate) {
-             newMessage = [...chatMessages, obj]
+            newMessage = [...chatMessages, obj]
         } 
         else {
-             newMessage = [...chatMessages]
+            newMessage = [...chatMessages]
         }
         
         switch (type) {
@@ -291,7 +287,7 @@ function UserChat(props) {
                     <div className={ props.userSidebar ? "w-70" : "w-100" }>
 
                         {/* render user head */}
-                        {  props.recentChatList[props.active_user] ? <UserHead /> : null } 
+                        { props.active_user ? <UserHead /> : null } 
 
                             <SimpleBar
                                 style={{ maxHeight: "100%" }}
@@ -299,97 +295,14 @@ function UserChat(props) {
                                 className="chat-conversation p-3 p-lg-4"
                                 id="messages">
                             <ul className="list-unstyled mb-0">
-                                
-                                
                                 {
                                     chatMessages.map((chat, key) => 
                                         chat.isToday && chat.isToday === true ? <li key={"dayTitle" + key}> 
                                             <div className="chat-day-title">
                                                 <span className="title">{chat.data}</span>
-                                            </div>
+                                            </div> 
                                         </li> : 
-                                        (props.recentChatList[props.active_user].isGroup === true) ? 
-                                            <li key={key} className={chat.userType === "sender" ? "right" : ""}>
-                                                <div className="conversation-list">
-                                                    
-                                                    <div className="chat-avatar">
-                                                    {chat.userType === "sender" ?   <img src={zutt} alt="ZuttChat" /> : 
-                                                        props.recentChatList[props.active_user].profilePicture === "Null" ?
-                                                                <div className="chat-user-img align-self-center mr-3">
-                                                                            <div className="avatar-xs">
-                                                                                <span className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                                                    {chat.userName && chat.userName.charAt(0)}                                                                                    
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="ZuttChat" />
-                                                    }
-                                                    </div>
-                
-                                                    <div className="user-chat-content">
-                                                        <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content">
-                                                                {
-                                                                    chat.message &&
-                                                                        <p className="mb-0">
-                                                                            {chat.message}
-
-                                                                        </p>
-                                                                }
-                                                                {
-                                                                    chat.audioMessage &&
-                                                                       <audio src={chat.audioMessage} controls="controls"/>
-                                                                        
-                                                                }
-                                                                {
-                                                                    chat.imageMessage &&
-                                                                        // image list component
-                                                                        <ImageList images={chat.imageMessage} />
-                                                                }
-                                                                {
-                                                                    chat.fileMessage &&
-                                                                        //file input component
-                                                                        <FileList fileName={chat.fileMessage} fileSize={chat.size} />
-                                                                }
-                                                                {
-                                                                    chat.isTyping &&
-                                                                        <p className="mb-0">
-                                                                            typing
-                                                                            <span className="animate-typing">
-                                                                                <span className="dot ml-1"></span>
-                                                                                <span className="dot ml-1"></span>
-                                                                                <span className="dot ml-1"></span>
-                                                                            </span>
-                                                                        </p>
-                                                                }
-                                                                {
-                                                                    !chat.isTyping && <p className="chat-time mb-0"><i className="ri-time-line align-middle"></i> <span className="align-middle">{chat.time}</span></p>
-                                                                }
-                                                            </div>
-                                                            {
-                                                                !chat.isTyping &&
-                                                                    <UncontrolledDropdown className="align-self-start">
-                                                                        <DropdownToggle tag="a">
-                                                                            <i className="ri-more-2-fill"></i>
-                                                                        </DropdownToggle>
-                                                                        <DropdownMenu>
-                                                                            <DropdownItem>{t('Copy')} <i className="ri-file-copy-line float-right text-muted"></i></DropdownItem>
-                                                                            <DropdownItem>{t('Save')} <i className="ri-save-line float-right text-muted"></i></DropdownItem>
-                                                                            <DropdownItem onClick={toggle}>Forward <i className="ri-chat-forward-line float-right text-muted"></i></DropdownItem>
-                                                                            <DropdownItem onClick={() => deleteMessage(chat.id) }>Delete <i className="ri-delete-bin-line float-right text-muted"></i></DropdownItem>
-                                                                        </DropdownMenu>
-                                                                    </UncontrolledDropdown>
-                                                            }
-                                                            
-                                                        </div>
-                                                        {
-                                                            <div className="conversation-name">{chat.userType === "sender" ? "Patricia Smith" : chat.userName}</div>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        :
-                                            <li key={key} className={chat.userType === "sender" ? "right" : ""}>
+                                            <li key={key} className={chat.userType !== "receiver" ? "right" : ""}>
                                                 <div className="conversation-list">
                                                         {
                                                             //logic for display user name and profile only once, if current and last messaged sent by same receiver

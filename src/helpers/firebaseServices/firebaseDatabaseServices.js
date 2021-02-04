@@ -6,8 +6,10 @@ class firebaseDatabaseServices {
     mandarMensagem = (messageObj, newMessage, numero, response) => {
         try{
             database
-              .ref("/server/talks/" + numero + "/messages")
-              .update([...newMessage, {...messageObj, MessageId: response.MessageId, status:"send"}])
+              .ref("/server/conversas/" + numero + "/messages")
+              .update([...newMessage, {...messageObj, MessageId: response.MessageId, status:"send"}]);
+            database
+              .ref("/server/talks/" + numero + "/messages").set([messageObj]);  
         }catch(error){
             console.log(error)
         }   
@@ -29,8 +31,8 @@ class firebaseDatabaseServices {
             message: messageObj.message,
             size : message.size,
             time : new Date().getTime(),
-            userType : "sender",
-            image : zutt,
+            userType : messageObj.userType,
+            image : messageObj.image,
             status: "send",
             ReferenceMessageId: messageObj.ReferenceMessageId,
             isImageMessage : true,
@@ -41,11 +43,11 @@ class firebaseDatabaseServices {
         if (lastTime !== currentDate) {
             database.ref("/server/talks/"+ numero + "/messages").update(
                 [...chatMessages, {isToday: true, data: currentDate}, messageImg]
-            )
+            );
+            database.ref("/server/conversas/"+ numero + "/messages").set([messageImg])
         } else {
-            database.ref("/server/talks/"+ numero + "/messages").update(
-                [...chatMessages, messageImg]
-            )
+            database.ref("/server/talks/"+ numero + "/messages").update([...chatMessages, messageImg]);
+            database.ref("/server/conversas/"+ numero + "/messages").set([messageImg])
         }       
     }
 
@@ -60,8 +62,8 @@ class firebaseDatabaseServices {
             audioMessage : response.AudioUrl,
             size : message.size,
             time : new Date().getTime(),
-            userType : "sender",
-            image : zutt,   
+            userType : messageObj.userType,
+            image : messageObj.image,   
             status: "send",
             ReferenceMessageId: messageObj.ReferenceMessageId,
             isImageMessage : false,
@@ -72,11 +74,11 @@ class firebaseDatabaseServices {
         if (lastTime !== currentDate) {
             database.ref("/server/talks/"+ numero + "/messages").update(
                 [...chatMessages, {isToday: true, data: currentDate}, messageAud]
-            )
+            );
+            database.ref("/server/conversas/"+ numero + "/messages").set([messageAud])
         } else {
-            database.ref("/server/talks/"+ numero + "/messages").update(
-                [...chatMessages, messageAud]
-            )
+            database.ref("/server/talks/"+ numero + "/messages").update([...chatMessages, messageAud]);
+            database.ref("/server/conversas/"+ numero + "/messages").set([messageAud])
         }
     }
 
@@ -94,8 +96,8 @@ class firebaseDatabaseServices {
             time : new Date().getTime(),
             status: "send",
             ReferenceMessageId: messageObj.ReferenceMessageId,
-            userType : "sender", 
-            image : zutt,
+            userType : messageObj.userType,
+            image : messageObj.image,
             isFileMessage : true,
             isImageMessage : false,
             isAudioMessage : false
@@ -104,11 +106,11 @@ class firebaseDatabaseServices {
         if (lastTime !== currentDate) {
             database.ref("/server/talks/"+ numero + "/messages").update(
                 [...chatMessages, {isToday: true, data: currentDate}, messageFile]
-            )
+            );
+            database.ref("/server/conversas/"+ numero + "/messages").set([messageFile])
         } else {
-            database.ref("/server/talks/"+ numero + "/messages").update(
-                [...chatMessages, messageFile]
-            )
+            database.ref("/server/talks/"+ numero + "/messages").update([...chatMessages, messageFile]);
+            database.ref("/server/conversas/"+ numero + "/messages").set([messageFile])
         }    
     }
 

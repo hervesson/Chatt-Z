@@ -55,11 +55,10 @@ function UserChat(props) {
 
     const [ chatMessages, setchatMessages ] = useState([]);
     const [ replyMessage, setReplyMessage ] = useState([]);
+   
     
     useEffect(() => {
-        if(props.active_user !== null){
-            retriveMessages()
-        }
+        if(props.active_user !== null){retriveMessages()}
         ref.current.recalculate();
         if (ref.current.el) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
@@ -72,16 +71,18 @@ function UserChat(props) {
 
     useEffect(() => {
         auth.onAuthStateChanged(function(user) {
-            if (user.displayName == null) {
-                toggle1()
-            } else{setModal1(false)}
+            if (user.displayName == null) { toggle1() } 
         });
-    }, [props.user])
+    }, [])
 
     useEffect(() => {
-        if (props.messageReply == false) {
-            setReplyMessage("");
-        } 
+        auth.onAuthStateChanged(function(user) {
+            if (user) {props.setUser(user)} 
+        });
+    }, [])
+
+    useEffect(() => {
+        if (props.messageReply == false) { setReplyMessage("") } 
     },[props.messageReply])
 
     const toggle = () => setModal(!modal);
@@ -269,12 +270,14 @@ function UserChat(props) {
     }
 
     const verificador = () => {
-        if (fileImage == ""){
-            alert("imagem vazia")
-        }else if (textMessage == "" ){
-            alert("sem usuário")
-        }else if(fileImage && textMessage !== ""){
-            props.updateUser(textMessage, fileImage)
+        if (fileImage == ""){  alert("imagem vazia")}
+        else if (textMessage == "" ){ alert("sem usuário")}
+        else if(fileImage && textMessage !== ""){
+            props.updateUser(fileImage);
+            var user = auth.currentUser;
+            user.updateProfile({ displayName: textMessage}).then(function(){
+                toggle1()
+            })
         }
     }
     
@@ -494,6 +497,7 @@ export default withRouter(connect(mapStateToProps,
     setFile, 
     requestContacts,
     setMessageReply, 
-    updateUser})
+    updateUser,
+    setUser})
 (UserChat));
 

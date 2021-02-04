@@ -41,13 +41,13 @@ class firebaseDatabaseServices {
         }
 
         if (lastTime !== currentDate) {
-            database.ref("/server/talks/"+ numero + "/messages").update(
+            database.ref("/server/conversas/"+ numero + "/messages").update(
                 [...chatMessages, {isToday: true, data: currentDate}, messageImg]
             );
-            database.ref("/server/conversas/"+ numero + "/messages").set([messageImg])
+            database.ref("/server/talks/"+ numero + "/messages").set([messageImg])
         } else {
-            database.ref("/server/talks/"+ numero + "/messages").update([...chatMessages, messageImg]);
-            database.ref("/server/conversas/"+ numero + "/messages").set([messageImg])
+            database.ref("/server/conversas/"+ numero + "/messages").update([...chatMessages, messageImg]);
+            database.ref("/server/talks/"+ numero + "/messages").set([messageImg])
         }       
     }
 
@@ -72,13 +72,13 @@ class firebaseDatabaseServices {
         }
 
         if (lastTime !== currentDate) {
-            database.ref("/server/talks/"+ numero + "/messages").update(
+            database.ref("/server/conversas/"+ numero + "/messages").update(
                 [...chatMessages, {isToday: true, data: currentDate}, messageAud]
             );
-            database.ref("/server/conversas/"+ numero + "/messages").set([messageAud])
+            database.ref("/server/talks/"+ numero + "/messages").set([messageAud])
         } else {
-            database.ref("/server/talks/"+ numero + "/messages").update([...chatMessages, messageAud]);
-            database.ref("/server/conversas/"+ numero + "/messages").set([messageAud])
+            database.ref("/server/conversas/"+ numero + "/messages").update([...chatMessages, messageAud]);
+            database.ref("/server/talks/"+ numero + "/messages").set([messageAud])
         }
     }
 
@@ -104,13 +104,13 @@ class firebaseDatabaseServices {
         }
 
         if (lastTime !== currentDate) {
-            database.ref("/server/talks/"+ numero + "/messages").update(
+            database.ref("/server/conversas/"+ numero + "/messages").update(
                 [...chatMessages, {isToday: true, data: currentDate}, messageFile]
             );
-            database.ref("/server/conversas/"+ numero + "/messages").set([messageFile])
+            database.ref("/server/talks/"+ numero + "/messages").set([messageFile])
         } else {
-            database.ref("/server/talks/"+ numero + "/messages").update([...chatMessages, messageFile]);
-            database.ref("/server/conversas/"+ numero + "/messages").set([messageFile])
+            database.ref("/server/conversas/"+ numero + "/messages").update([...chatMessages, messageFile]);
+            database.ref("/server/talks/"+ numero + "/messages").set([messageFile])
         }    
     }
 

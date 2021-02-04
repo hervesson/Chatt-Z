@@ -215,11 +215,9 @@ function UserChat(props) {
 
     const deleteMessage = (id) => {
         let conversation = chatMessages;
-
         var filtered = conversation.filter(function (item) {
-            return item.id !== id;
+            return item.MessageId !== id;
         });
-
         setchatMessages(filtered);
     }
 

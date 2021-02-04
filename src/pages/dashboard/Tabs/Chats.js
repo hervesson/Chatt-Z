@@ -19,7 +19,7 @@ class Chats extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            nav: "Todos",
+            nav: "Novo",
             searchChat : "",
             recentChatList : this.props.recentChatList
         }
@@ -207,7 +207,7 @@ class Chats extends Component {
                                         {
                                             this.state.recentChatList.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
-                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id); this.props.clearMessageReply(); this.atribuir()}}>
+                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id); this.props.clearMessageReply(); this.atribuir(chat)}}>
                                                         <Media>
                                                             {
                                                                 chat.profilePicture === "Null" ?

@@ -314,29 +314,29 @@ function UserChat(props) {
                                                             </div>
                                                             :  
                                                                 <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="ZuttChat" /> : 
-                                                                        props.recentChatList[props.active_user].profilePicture === "Null" ?
+                                                                    {chat.userType !== "receiver" ?   <img src={chat.image} alt="ZuttChat" /> : 
+                                                                        props.active_user.profilePicture === "Null" ?
                                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                                             <div className="avatar-xs">
                                                                                                 <span className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                                                                    {props.recentChatList[props.active_user].name.charAt(0)}
+                                                                                                    {props.active_user.name.charAt(0)}
                                                                                                 </span>
                                                                                             </div>
                                                                                         </div>
-                                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="ZuttChat" />
+                                                                        :  <img src={props.active_user.profilePicture} alt="ZuttChat" />
                                                                     }
                                                                 </div>
                                                             :   <div className="chat-avatar">
-                                                                    {chat.userType === "sender" ?   <img src={zutt} alt="ZuttChat" /> : 
-                                                                        props.recentChatList[props.active_user].profilePicture === "Null" ?
+                                                                    {chat.userType !== "receiver" ?   <img src={chat.image} alt="ZuttChat" /> : 
+                                                                        props.active_user.profilePicture === "Null" ?
                                                                                 <div className="chat-user-img align-self-center mr-3">
                                                                                             <div className="avatar-xs">
                                                                                                 <span className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                                                                    {props.recentChatList[props.active_user].name.charAt(0)}
+                                                                                                    {props.active_user.name.charAt(0)}
                                                                                                 </span>
                                                                                             </div>
                                                                                         </div>
-                                                                        :  <img src={props.recentChatList[props.active_user].profilePicture} alt="ZuttChat" />
+                                                                        :  <img src={props.active_user.profilePicture} alt="ZuttChat" />
                                                                     }
                                                                 </div>
                                                         }
@@ -396,7 +396,7 @@ function UserChat(props) {
                                                                 }
                                                                 {
                                                                     !chat.isTyping && <p className="chat-time mb-0">
-                                                                        {chat.userType === "sender" ? status(chat.status) : null}   
+                                                                        {chat.userType !== "receiver" ? status(chat.status) : null}   
                                                                         {time(chat.time)}
                                                                     </p>
                                                                 }
@@ -412,17 +412,19 @@ function UserChat(props) {
                                                                             <DropdownItem>{t('Copy')} <i className="ri-file-copy-line float-right text-muted"></i></DropdownItem>
                                                                             <DropdownItem>{t('Save')} <i className="ri-save-line float-right text-muted"></i></DropdownItem>
                                                                             <DropdownItem onClick={toggle}>Encaminhar<i className="ri-chat-forward-line float-right text-muted"></i></DropdownItem>
-                                                                            <DropdownItem onClick={() => deleteMessage(chat.id) }>Deletar <i className="ri-delete-bin-line float-right text-muted"></i></DropdownItem>
+                                                                            <DropdownItem onClick={() => deleteMessage(chat.MessageId) }>Deletar <i className="ri-delete-bin-line float-right text-muted"></i></DropdownItem>
                                                                         </DropdownMenu>
                                                                     </UncontrolledDropdown>
                                                             }
                                                             
                                                         </div>
                                                         {
-                                                            chatMessages[key+1] ? chatMessages[key].userType === chatMessages[key+1].userType ? null :  <div className="conversation-name">{chat.userType === "sender" ?  "Zutt Salles" : props.recentChatList[props.active_user].name}</div> : <div className="conversation-name">{chat.userType === "sender" ? "Zutt Salles" : props.recentChatList[props.active_user].name}</div>
+                                                            chatMessages[key+1] ? chatMessages[key].userType === chatMessages[key+1].userType ? null :  
+                                                            <div className="conversation-name">{chat.userType !== "receiver" ?  chat.userType : props.active_user.name}</div> : 
+                                                            <div className="conversation-name">{chat.userType !== "receiver" ?  chat.userType : props.active_user.name}</div>
                                                         }
                                                         {/* {
-                                                            <div className="conversation-name">{chat.userType === "sender" ? "Admin" : props.recentChatList[props.active_user].name}</div>
+                                                            <div className="conversation-name">{chat.userType === "sender" ? "Admin" : props.active_user.name}</div>
                                                         } */}
 
                                                     </div>
@@ -444,7 +446,7 @@ function UserChat(props) {
                                         <Button color="primary">Encaminhar</Button>
                                     </ModalFooter>
                                 </CardBody>
-                            </ModalBody>
+                            </ModalBody> 
                         </Modal>
                         <Modal backdrop="static" isOpen={modal1} centered toggle={toggle1}>
                             <ModalHeader>Insira sua foto e nome de usuário</ModalHeader>

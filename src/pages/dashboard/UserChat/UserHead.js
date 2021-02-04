@@ -27,7 +27,7 @@ function UserHead(props) {
 
     function deleteMessage()
     {
-         let allUsers = props.users;
+        let allUsers = props.users;
         let copyallUsers = allUsers;
         copyallUsers[props.active_user].messages =  [];
        
@@ -45,14 +45,14 @@ function UserHead(props) {
                                             <i className="ri-arrow-left-s-line"></i></Link>
                                         </div>
                                         {
-                                            props.users[props.active_user].profilePicture !== "Null" ?
+                                            props.active_user.profilePicture !== "Null" ?
                                                 <div className="mr-3">
-                                                    <img src={props.users[props.active_user].profilePicture} className="rounded-circle avatar-xs" alt="Z-Chat" />
+                                                    <img src={props.active_user.profilePicture} className="rounded-circle avatar-xs" alt="Z-Chat" />
                                                 </div>
                                             :   <div className="chat-user-img align-self-center mr-3">
                                                     <div className="avatar-xs">
                                                         <span className="avatar-title rounded-circle bg-soft-primary text-primary">
-                                                            {props.users[props.active_user].name.charAt(0)}
+                                                            {props.active_user.name.charAt(0)}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -61,10 +61,10 @@ function UserHead(props) {
                                         <Media body className="overflow-hidden">
                                             <h5 className="font-size-16 mb-0 text-truncate">
                                             <Link to="#" onClick={(e) => openUserSidebar(e)} className="text-reset user-profile-show">
-                                            {props.users[props.active_user].name}
+                                            {props.active_user.name}
                                             </Link> 
                                                                                 {(() => {
-                                                                                    switch (props.users[props.active_user].status) {
+                                                                                    switch (props.active_user.status) {
                                                                                         case "online":
                                                                                             return (
                                                                                                 <>
@@ -126,7 +126,7 @@ function UserHead(props) {
                                                     <DropdownItem className="d-block d-lg-none user-profile-show" onClick={(e) => openUserSidebar(e)}>View profile <i className="ri-user-2-line float-right text-muted"></i></DropdownItem>
                                                     <DropdownItem>Archive <i className="ri-archive-line float-right text-muted"></i></DropdownItem>
                                                     <DropdownItem>Muted <i className="ri-volume-mute-line float-right text-muted"></i></DropdownItem>
-                                                    <DropdownItem onClick={(e)=>deleteMessage(e)}>Delete <i className="ri-delete-bin-line float-right text-muted"></i></DropdownItem>
+                                                    <DropdownItem onClick={(e)=> {console.log(e) /*deleteMessage(e)*/}}>Delete <i className="ri-delete-bin-line float-right text-muted"></i></DropdownItem>
                                                 </DropdownMenu>
                                             </Dropdown>
                                         </li>
@@ -141,8 +141,8 @@ function UserHead(props) {
 
 
 const mapStateToProps = (state) => {
-    const { users,active_user } = state.Chat;
-    return { ...state.Layout,users,active_user };
+    const { users, active_user } = state.Chat;
+    return { ...state.Layout, users, active_user };
 };
 
 export default connect(mapStateToProps, { openUserSidebar,setFullUser })(UserHead);

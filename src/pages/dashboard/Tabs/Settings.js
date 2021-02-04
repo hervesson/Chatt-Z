@@ -87,7 +87,7 @@ function Settings(props) {
     const saveUsuario = () => {
         var user = auth.currentUser;
         user.updateProfile({
-          displayName: novoUsuario ? novoUsuario : props.user.displayName
+          displayName: novoUsuario ? novoUsuario : user.displayName
         }).then(function() {
           setStateUsuario(false)
         }).catch(function(error) {

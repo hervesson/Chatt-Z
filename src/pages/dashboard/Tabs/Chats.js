@@ -7,6 +7,8 @@ import 'moment/locale/pt-br';
 //simplebar
 import SimpleBar from "simplebar-react";
 
+import { database } from "../../../helpers/firebase";
+
 //actions
 import { setconversationNameInOpenChat, activeUser, deleteRead, clearMessageReply } from "../../../redux/actions"
 
@@ -17,7 +19,7 @@ class Chats extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            chat: '',
+            nav: "Todos",
             searchChat : "",
             recentChatList : this.props.recentChatList
         }
@@ -34,21 +36,27 @@ class Chats extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps !== this.props) {
-            this.setState({
-                recentChatList : this.props.recentChatList
-            });
-            this.props.recentChatList.forEach((item, index) => {if(item.id === this.state.chat.id){
-                this.props.activeUser(index);
-                this.props.deleteRead(item.id)
-            }});   
+            this.filter(this.state.nav)
         }
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.recentChatList !== nextProps.recentChatList) {
-            this.setState({
-                recentChatList: nextProps.recentChatList,
-            });
+            this.filter(this.state.nav)
+        }
+    }
+
+    filter(query){
+        var filter = []
+        if(query === "Todos"){
+            this.setState({ recentChatList: this.props.recentChatList})
+        }else{
+            this.props.recentChatList.forEach(doc => {
+                if (doc.atendente === query) {
+                    filter.push(doc)
+                }
+            }) 
+            this.setState({ recentChatList: filter})
         }
     }
 
@@ -68,18 +76,17 @@ class Chats extends Component {
         this.setState({ recentChatList : filteredArray })
 
         //if input value is blanck then assign whole recent chatlist to array
-        if(search === "") this.setState({ recentChatList : this.props.recentChatList })
+        if(search === "")  this.filter(this.state.nav)
     }
 
     openUserChat(e,chat) {
-        this.setState({chat: chat})
         e.preventDefault();
 
         //find index of current chat in array
-        var index = this.props.recentChatList.indexOf(chat);
+        //var index = this.props.recentChatList.indexOf(chat);
 
         // set activeUser 
-        this.props.activeUser(index); 
+        this.props.activeUser(chat); 
 
         var chatList = document.getElementById("chat-list");
         var clickedItem = e.target;
@@ -119,6 +126,15 @@ class Chats extends Component {
         }
     }
 
+    atribuir(chat){
+        const user = this.props.user.displayName
+        if(chat.atendente === "Novo"){
+            database.ref("/server/talks/"+ chat.id + "/atendente").transaction(function(read) {
+                return user;
+            })
+        }
+    }
+
     renderTime(time){
         const now = moment().format('L');
         const data = moment(time).format('L');
@@ -127,11 +143,11 @@ class Chats extends Component {
 
         if(now == data){
             return moment(time).format('HH:mm')
-        }else if(date2.diff(date1, 'days') == 1){
+        }else if(date2.diff(date1, 'days') === 1){
             return "Ontem"
         }else if(date2.diff(date1, 'days') < 7){
             return moment(time).locale('pt-br').format('dddd')
-        }else if(date2.diff(date1, 'days') > 7 || moment(time).format("YYYY") == moment().format('YYYY')){
+        }else if(date2.diff(date1, 'days') > 7 || moment(time).format("YYYY") === moment().format('YYYY')){
             return moment(time).format('DD/MM/YYYY')
         }else if(moment(time).format("YYYY") == "2020"){
             return moment(time).format('DD/MM/YYYY')
@@ -175,13 +191,23 @@ class Chats extends Component {
                             {/* Start chat-message-list  */}
                             <div className="px-2">
                                 <h5 className="mb-3 px-3 font-size-16">Conversas</h5>
+                                <ul className="nav nav-tabs nav-fill">
+                                    <li className="nav-item">
+                                        <a className={this.state.nav == "Novo" ? "nav-link active":"nav-link"} onClick={()=> {this.setState({nav: "Novo"}); this.filter("Novo") }}>Novos</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className={this.state.nav == "Todos" ? "nav-link active":"nav-link"}  onClick={()=> {this.setState({nav: "Todos"}); this.filter("Todos") }}>Todos</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className={this.state.nav == this.props.user.displayName ? "nav-link active":"nav-link"} onClick={()=> { this.setState({nav: this.props.user.displayName}); this.filter(this.props.user.displayName)}}>Meus</a>
+                                    </li>
+                                </ul>
                                 <SimpleBar style={{ height: 440 }} className="chat-message-list">
-
                                     <ul className="list-unstyled chat-list chat-user-list" id="chat-list">
                                         {
                                             this.state.recentChatList.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
-                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id); this.props.clearMessageReply()}}>
+                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id); this.props.clearMessageReply(); this.atribuir()}}>
                                                         <Media>
                                                             {
                                                                 chat.profilePicture === "Null" ?
@@ -233,8 +259,12 @@ class Chats extends Component {
                                                                 </p>
                                                             </Media>
                                                             <div className="font-size-11">{chat.messages && chat.messages.length > 0 ?  this.renderTime(chat.messages[(chat.messages).length - 1].time) : null}</div>
-                                                            {chat.unRead === 0 ? null :
+                                                            {chat.unRead === 0 ?
+                                                                <div className="unread-message" >
+                                                                    <span style={{fontSize:10}}>{chat.atendente}</span>
+                                                                </div>     :
                                                                 <div className="unread-message" id={"unRead" + chat.id}>
+                                                                    <span style={{fontSize:10, padding:7, color:"red"}}>{chat.atendente}</span>
                                                                     <span className="badge badge-soft-danger badge-pill">{chat.messages && chat.messages.length > 0 ? chat.unRead >= 20 ? chat.unRead + "+" : chat.unRead  : ""}</span>
                                                                 </div>
                                                             } 
@@ -256,7 +286,8 @@ class Chats extends Component {
 
 const mapStateToProps = (state) => {
     const { active_user } = state.Chat;
-    return { active_user };
+    const { user } = state.Auth;
+    return { active_user, user };
 };
 
 export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser, deleteRead, clearMessageReply })(Chats);

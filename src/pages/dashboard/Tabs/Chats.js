@@ -120,10 +120,10 @@ class Chats extends Component {
         }
 
         //removes unread badge if user clicks
-        var unread = document.getElementById("unRead" + chat.id);
+        {/*var unread = document.getElementById("unRead" + chat.id);
         if(unread) {
             unread.style.display="none";
-        }
+        }*/}
     }
 
     atribuir(chat){

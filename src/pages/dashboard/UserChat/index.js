@@ -58,7 +58,17 @@ function UserChat(props) {
    
     
     useEffect(() => {
-        if(props.active_user !== null){retriveMessages()}
+        if(props.active_user !== null){
+            const ref = database.ref("/server/conversas/" + props.active_user.id + "/messages")
+            const listener = ref.on("value", snapshot => {
+                let conversas = [];
+                snapshot.forEach(ids => {
+                    conversas.push(ids.val()); 
+                })
+                setchatMessages(conversas); 
+            });
+            return () => ref.off('value', listener);
+        }
         ref.current.recalculate();
         if (ref.current.el) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
@@ -87,16 +97,6 @@ function UserChat(props) {
 
     const toggle = () => setModal(!modal);
     const toggle1 = () => setModal1(!modal1);
-
-    const  retriveMessages = () => {
-        database.ref("/server/conversas/" + props.active_user.id + "/messages").on("value", snapshot => {
-            let conversas = [];
-            snapshot.forEach(ids => {
-                conversas.push(ids.val()); 
-            })
-            setchatMessages(conversas); 
-        });
-    }
 
     const addMessage = (message, type, legenda="") => {
         var messageObj = null;

@@ -10,7 +10,7 @@ import SimpleBar from "simplebar-react";
 import { database } from "../../../helpers/firebase";
 
 //actions
-import { setconversationNameInOpenChat, activeUser, deleteRead, clearMessageReply } from "../../../redux/actions"
+import { setconversationNameInOpenChat, activeUser, clearMessageReply } from "../../../redux/actions"
 
 //components
 //import OnlineUsers from "./OnlineUsers";
@@ -207,7 +207,7 @@ class Chats extends Component {
                                         {
                                             this.state.recentChatList.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
-                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.deleteRead(chat.id); this.props.clearMessageReply(); this.atribuir(chat)}}>
+                                                    <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.clearMessageReply(); this.atribuir(chat)}}>
                                                         <Media>
                                                             {
                                                                 chat.profilePicture === "Null" ?
@@ -290,4 +290,4 @@ const mapStateToProps = (state) => {
     return { active_user, user };
 };
 
-export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser, deleteRead, clearMessageReply })(Chats);
+export default connect(mapStateToProps, { setconversationNameInOpenChat, activeUser, clearMessageReply })(Chats);

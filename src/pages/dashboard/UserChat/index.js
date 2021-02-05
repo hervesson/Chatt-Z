@@ -25,8 +25,8 @@ import { openUserSidebar,
     setImage, 
     setAudio, 
     setFile, 
-    requestContacts,
-    setMessageReply, 
+    requestContacts, 
+    setMessageReply, deleteRead,
     updateUser, setUser
 } from "../../../redux/actions";
 
@@ -69,10 +69,6 @@ function UserChat(props) {
             });
             return () => ref.off('value', listener);
         }
-        ref.current.recalculate();
-        if (ref.current.el) {
-            ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
-        }
     },[props.active_user]);
 
     useEffect(() => {
@@ -86,10 +82,20 @@ function UserChat(props) {
     }, [])
 
     useEffect(() => {
-        auth.onAuthStateChanged(function(user) {
-            if (user) {props.setUser(user)} 
-        });
+        auth.onAuthStateChanged(function(user) { if (user) {props.setUser(user)}});
     }, [])
+
+    useEffect(() => {
+        if(props.active_user !== null){
+            if(chatMessages[chatMessages.length -1].userType === "receiver"){
+                props.deleteRead(props.active_user.id)
+            }
+        }
+        ref.current.recalculate();
+        if (ref.current.el) {
+            ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
+        }
+    }, [chatMessages])
 
     useEffect(() => {
         if (props.messageReply == false) { setReplyMessage("") } 
@@ -498,6 +504,7 @@ export default withRouter(connect(mapStateToProps,
     requestContacts,
     setMessageReply, 
     updateUser,
+    deleteRead,
     setUser})
 (UserChat));
 

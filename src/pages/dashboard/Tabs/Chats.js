@@ -131,7 +131,8 @@ class Chats extends Component {
         if(chat.atendente === "Novo"){
             database.ref("/server/talks/"+ chat.id + "/atendente").transaction(function(read) {
                 return user;
-            })
+            });
+            this.setState({nav: this.props.user.displayName})
         }
     }
 

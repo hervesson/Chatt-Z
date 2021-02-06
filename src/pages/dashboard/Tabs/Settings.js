@@ -116,10 +116,10 @@ function Settings(props) {
                                 <div className="mb-4 profile-user">
                                     <img src={messageIdGenerator()} className="rounded-circle avatar-lg img-thumbnail" alt="chatvia" />
                                     <Button type="button" color="light" className="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                        <Label>
+                                       {/* <Label>
                                             <i className="ri-pencil-fill"></i> 
                                             <Input onChange={(e) => handleImageChange(e)} accept="image/*" type="file" className="invisible" />
-                                        </Label> 
+                                        </Label> */}
                                     </Button>   
                                     
                                 </div>
@@ -150,14 +150,14 @@ function Settings(props) {
                                         >
 
                                                 <div className="float-right">
-                                                    <Button color="light" size="sm" type="button" onClick={() => usuario ? saveUsuario() : setStateUsuario(true) }>
+                                                    {/*<Button color="light" size="sm" type="button" onClick={() => usuario ? saveUsuario() : setStateUsuario(true) }>
                                                         {
                                                             usuario ? 
                                                                 <div><i className="ri-save-line mr-1 align-middle"></i> {t('Save')}</div>
                                                             :    
                                                                 <div><i className="ri-edit-fill mr-1 align-middle"></i> {t('Edit')}</div>
                                                         }
-                                                    </Button>
+                                                    </Button>*/}
                                                 </div>
 
                                                 {   usuario ? 

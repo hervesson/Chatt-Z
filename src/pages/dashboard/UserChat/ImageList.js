@@ -37,7 +37,7 @@ function ImageList(props) {
                                                             <div className="message-img-link">
                                                                 <ul className="list-inline mb-0">
                                                                     <li className="list-inline-item">
-                                                                        <a href={imgMsg.image} target="_blank"  download>
+                                                                        <a href={imgMsg.image} target="_blank" rel="noopener noreferrer" download>
                                                                             <i className="ri-download-2-line"></i>
                                                                         </a>
                                                                     </li>

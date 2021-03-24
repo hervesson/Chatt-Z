@@ -1,6 +1,5 @@
 import { database } from "../firebase";
 import moment from 'moment'; 
-import zutt from "../../assets/images/users/zutt.png";
 
 class firebaseDatabaseServices {
     mandarMensagem = (messageObj, newMessage, numero, response) => {

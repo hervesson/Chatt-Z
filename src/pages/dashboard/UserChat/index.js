@@ -32,7 +32,6 @@ import { openUserSidebar,
 
 //Import Images
 
-import zutt from "../../../assets/images/users/zutt.png";
 import profile from "../../../assets/images/users/profile.png";
 
 //i18n
@@ -73,24 +72,24 @@ function UserChat(props) {
 
     useEffect(() => {
        props.requestChat();  props.requestContacts()
-    },[]); 
+    }); 
 
     useEffect(() => {
         auth.onAuthStateChanged(function(user) {
             if (user.displayName == null) { toggle1() } 
         });
-    }, [])
+    })
 
     useEffect(() => {
         auth.onAuthStateChanged(function(user) { if (user) {props.setUser(user)}});
-    }, [])
+    })
 
     useEffect(() => {
-        if(props.active_user !== null){
-            if(chatMessages[chatMessages.length -1].userType === "receiver"){
-                props.deleteRead(props.active_user.id)
-            }
-        }
+        //if(props.active_user !== null){
+            //if(chatMessages[chatMessages.length -1].userType === "receiver"){
+                //props.deleteRead(props.active_user.id)
+            //}
+        //}
         ref.current.recalculate();
         if (ref.current.el) {
             ref.current.getScrollElement().scrollTop = ref.current.getScrollElement().scrollHeight;
@@ -98,7 +97,7 @@ function UserChat(props) {
     }, [chatMessages])
 
     useEffect(() => {
-        if (props.messageReply == false) { setReplyMessage("") } 
+        if (props.messageReply === false) { setReplyMessage("") } 
     },[props.messageReply])
 
     const toggle = () => setModal(!modal);
@@ -251,7 +250,7 @@ function UserChat(props) {
 
     const reply = (MessageId) => {
         var vaq = []
-        chatMessages.forEach(doc => {if(doc.MessageId == MessageId){ vaq.push(doc) }})
+        chatMessages.forEach(doc => {if(doc.MessageId === MessageId){ vaq.push(doc) }})
         if(vaq.length !==0 ){
             return(
                 <MessageReply reply={vaq[0]}/>
@@ -274,8 +273,8 @@ function UserChat(props) {
     }
 
     const verificador = () => {
-        if (fileImage == ""){  alert("imagem vazia")}
-        else if (textMessage == "" ){ alert("sem usuário")}
+        if (fileImage === ""){  alert("imagem vazia")}
+        else if (textMessage === "" ){ alert("sem usuário")}
         else if(fileImage && textMessage !== ""){
             props.updateUser(fileImage);
             var user = auth.currentUser;

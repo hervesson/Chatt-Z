@@ -9,7 +9,7 @@ const MessageReply = (props) => {
 			<div className="bg-primary mb-1 rounded">
 		    	<div className="d-flex justify-content-between align-items-center">
 			    	<div className="pl-1 pr-1">
-			    		<p style={{fontSize:10}}> {props.reply.userType == "sender" ? "Voce" : "Cliente"} <br/> 
+			    		<p style={{fontSize:10}}> {props.reply.userType === "sender" ? "Voce" : "Cliente"} <br/> 
 			    			{
 			    				props.reply.message && 
 								<span style={{fontSize:15}}>{props.reply.message}</span>

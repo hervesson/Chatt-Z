@@ -120,10 +120,10 @@ class Chats extends Component {
         }
 
         //removes unread badge if user clicks
-        {/*var unread = document.getElementById("unRead" + chat.id);
-        if(unread) {
-            unread.style.display="none";
-        }*/}
+        //var unread = document.getElementById("unRead" + chat.id);
+        //if(unread) {
+            //unread.style.display="none";
+        //}
     }
 
     atribuir(chat){
@@ -142,7 +142,7 @@ class Chats extends Component {
         var date1 = moment({ day:moment(time).format("DD"), month: moment(time).format("MM"), year:moment(time).format("YYYY") });
         var date2 = moment({ day:moment().format("DD"), month: moment().format("MM"), year:moment().format("YYYY") });
 
-        if(now == data){
+        if(now === data){
             return moment(time).format('HH:mm')
         }else if(date2.diff(date1, 'days') === 1){
             return "Ontem"
@@ -150,7 +150,7 @@ class Chats extends Component {
             return moment(time).locale('pt-br').format('dddd')
         }else if(date2.diff(date1, 'days') > 7 || moment(time).format("YYYY") === moment().format('YYYY')){
             return moment(time).format('DD/MM/YYYY')
-        }else if(moment(time).format("YYYY") == "2020"){
+        }else if(moment(time).format("YYYY") === "2020"){
             return moment(time).format('DD/MM/YYYY')
         }  
     }
@@ -172,7 +172,7 @@ class Chats extends Component {
             <React.Fragment>
                         <div>
                             <div className="px-4 pt-4">
-                                <h4 className="mb-4">krbrindes</h4>
+                                <h4 className="mb-4">Foguete Chat</h4>
                                 <div className="search-box chat-search-box">
                                     <InputGroup size="lg" className="mb-3 bg-light rounded-lg">
                                         <InputGroupAddon addonType="prepend">
@@ -194,19 +194,19 @@ class Chats extends Component {
                                 <h5 className="mb-3 px-3 font-size-16">Conversas</h5>
                                 <ul className="nav nav-tabs nav-fill">
                                     <li className="nav-item">
-                                        <a className={this.state.nav == "Novo" ? "nav-link active":"nav-link"} onClick={()=> {this.setState({nav: "Novo"}); this.filter("Novo") }}>Novos</a>
+                                        <a className={this.state.nav === "Novo" ? "nav-link active":"nav-link"} onClick={()=> {this.setState({nav: "Novo"}); this.filter("Novo") }}>Novos</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className={this.state.nav == "Todos" ? "nav-link active":"nav-link"}  onClick={()=> {this.setState({nav: "Todos"}); this.filter("Todos") }}>Todos</a>
+                                        <a className={this.state.nav === "Todos" ? "nav-link active":"nav-link"}  onClick={()=> {this.setState({nav: "Todos"}); this.filter("Todos") }}>Todos</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className={this.state.nav == this.props.user.displayName ? "nav-link active":"nav-link"} onClick={()=> { this.setState({nav: this.props.user.displayName}); this.filter(this.props.user.displayName)}}>Meus</a>
+                                        <a className={this.state.nav === this.props.user.displayName ? "nav-link active":"nav-link"} onClick={()=> { this.setState({nav: this.props.user.displayName}); this.filter(this.props.user.displayName)}}>Meus</a>
                                     </li>
                                 </ul>
                                 <SimpleBar style={{ height: 440 }} className="chat-message-list">
                                     <ul className="list-unstyled chat-list chat-user-list" id="chat-list">
                                         {
-                                            this.state.recentChatList.map((chat, key) =>
+                                            sorted.map((chat, key) =>
                                                 <li key={key} id={"conversation" + key} className={chat.unRead ? "unread" : chat.isTyping ?  "typing" :  key === this.props.active_user ? "active" : ""}>
                                                     <Link to="#" onClick={(e) => {this.openUserChat(e, chat); this.props.clearMessageReply(); this.atribuir(chat)}}>
                                                         <Media>

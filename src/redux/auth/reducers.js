@@ -11,8 +11,6 @@ import {
     SET_USER
 } from './constants';
 
-import { getLoggedInUser } from '../../helpers/authUtils';
-
 const INIT_STATE = {
     user: [],
     loading: false

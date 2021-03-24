@@ -1,9 +1,6 @@
 import {
     CHAT_USER, ACTIVE_USER,FULL_USER, ADD_LOGGED_USER, CREATE_GROUP, REQUEST_CHAT, REQUEST_SUCESS, REQUEST_FAILED, SET_IMAGE, SET_AUDIO, SET_FILE, REQUEST_CONTACTS, CONTACTS_SUCESS, DELETE_READ, SETMESSAGEREPLY, CLEARMESSAGEREPLY} from './constants';
 
-//Import Images
-import avatar2 from "../../assets/images/users/avatar-2.jpg";
-
 const INIT_STATE = {
 	active_user : null,
     users: [],
